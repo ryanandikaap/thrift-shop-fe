@@ -1,9 +1,16 @@
 import React from 'react';
 import { ShoppingBag, Search, Menu, X } from 'lucide-react';
 
-const Header = ({ cart, searchQuery, setSearchQuery, mobileMenuOpen, setMobileMenuOpen }) => {
+const Header = ({ 
+  cart, 
+  searchQuery, 
+  setSearchQuery, 
+  mobileMenuOpen, 
+  setMobileMenuOpen,
+  scrolled 
+}) => {
   return (
-    <header className="header">
+    <header className={`header ${scrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="header-content">
           <button 

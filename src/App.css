@@ -50,7 +50,7 @@
 
 .container {
   width: 100%;
-  max-width: 1536px; /* Diperlebar dari 1280px untuk mengurangi margin samping di layar besar */
+  max-width: 1792px; /* Diperlebar lagi untuk mengurangi margin di layar sangat lebar */
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -550,6 +550,7 @@
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 30px;
   margin-top: 40px;
 }
@@ -733,7 +734,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px; /* Menambahkan jarak antara rating dan tombol aksi */
   margin-top: auto;
+}
+
+.product-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .rating {
@@ -748,6 +755,28 @@
   fill: currentColor;
 }
 
+.buy-now-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(139, 115, 85, 0.2);
+}
+
+.buy-now-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(139, 115, 85, 0.3);
+}
+
 .add-to-cart-btn {
   display: flex;
   align-items: center;
@@ -755,13 +784,23 @@
   background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
   color: var(--white);
   border: none;
-  padding: 12px 24px;
+  padding: 12px 20px;
   border-radius: var(--radius);
   cursor: pointer;
   font-weight: 600;
   font-size: 0.95rem;
   transition: var(--transition);
   box-shadow: 0 4px 15px rgba(74, 108, 111, 0.2);
+}
+
+.add-to-cart-btn span, .buy-now-btn span {
+  transition: var(--transition);
+}
+
+@media (max-width: 340px) {
+  .add-to-cart-btn span, .buy-now-btn span {
+    display: none;
+  }
 }
 
 .add-to-cart-btn:hover {

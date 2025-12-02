@@ -10,7 +10,7 @@ const Header = ({
   setMobileMenuOpen, 
   scrolled,
   isLoggedIn,
-  onLoginToggle 
+  onAuthAction
 }) => {
 
   const navLinks = [
@@ -59,12 +59,12 @@ const Header = ({
             </button>
 
             {isLoggedIn ? (
-              <button className="login-btn" onClick={onLoginToggle} aria-label="Logout">
+              <button className="login-btn" onClick={onAuthAction} aria-label="Logout">
                 <LogOut size={22} />
                 <span>Logout</span>
               </button>
             ) : (
-              <button className="login-btn" onClick={onLoginToggle} aria-label="Login">
+              <button className="login-btn" onClick={onAuthAction} aria-label="Login">
                 <LogIn size={22} />
                 <span>Login</span>
               </button>

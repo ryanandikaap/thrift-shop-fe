@@ -1,35 +1,39 @@
 import React from 'react';
-import { Heart, ShoppingCart, Star } from 'lucide-react';
+import { Star, Heart, ShoppingCart, ShoppingBag } from 'lucide-react';
 
 const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
-  const { 
-    id, 
-    name, 
-    price, 
-    originalPrice, 
-    discount, 
-    image, 
-    isNew, 
-    isFavorite, 
-    rating, 
-    reviews, 
-    description, 
-    size, 
-    condition 
+  const {
+    id,
+    name,
+    price,
+    originalPrice,
+    discount,
+    image,
+    isNew,
+    isFavorite,
+    rating,
+    description,
+    size,
+    condition,
   } = product;
+
+  const handleBuyNow = (product) => {
+    // Simulasi: langsung ke halaman checkout atau menampilkan ringkasan
+    alert(`Simulasi: Anda membeli ${product.name} sekarang!`);
+  };
 
   return (
     <div className="product-card">
       <div className="product-image">
-        <img src={image} alt={name} />
+        <img src={image} alt={name} loading="lazy" />
         {isNew && <span className="new-badge">Baru</span>}
         {discount && <span className="discount-badge">-{discount}%</span>}
         <button 
           className={`favorite-btn ${isFavorite ? 'active' : ''}`} 
           onClick={() => onToggleFavorite(id)}
-          aria-label={isFavorite ? "Hapus dari favorit" : "Tambahkan ke favorit"}
+          aria-label="Toggle Favorite"
         >
-          <Heart size={20} fill={isFavorite ? 'currentColor' : 'none'} />
+          <Heart size={20} />
         </button>
       </div>
       <div className="product-info">
@@ -40,36 +44,32 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
             {originalPrice && <span className="original-price">Rp{originalPrice.toLocaleString('id-ID')}</span>}
           </div>
         </div>
-        <p className="product-description">
-          {description.length > 100 ? description.substring(0, 100) + '...' : description}
-        </p>
+        <p className="product-description">{description}</p>
         <div className="product-details">
-          {size && (
-            <div className="size">
-              <span>Ukuran</span>
-              <span>{size}</span>
-            </div>
-          )}
-          {condition && (
-            <div className="condition">
-              <span>Kondisi</span>
-              <span>{condition}</span>
-            </div>
-          )}
+          <div className="size">
+            <span>Ukuran</span>
+            <strong>{size}</strong>
+          </div>
+          <div className="condition">
+            <span>Kondisi</span>
+            <strong>{condition}</strong>
+          </div>
         </div>
         <div className="product-footer">
           <div className="rating">
-            <Star size={16} fill="currentColor" />
-            <span>{rating} ({reviews})</span>
+            <Star size={18} />
+            <span>{rating}</span>
           </div>
-          <button 
-            className="add-to-cart-btn" 
-            onClick={() => onAddToCart(product)}
-            aria-label="Tambahkan ke keranjang"
-          >
-            <ShoppingCart size={18} />
-            <span>Tambah</span>
-          </button>
+          <div className="product-actions">
+            <button className="buy-now-btn" onClick={() => handleBuyNow(product)}>
+              <ShoppingBag size={18} />
+              <span>Beli</span>
+            </button>
+            <button className="add-to-cart-btn" onClick={() => onAddToCart(product)}>
+              <ShoppingCart size={18} />
+              <span>Keranjang</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

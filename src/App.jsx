@@ -8,6 +8,7 @@ import Contact from './pages/Contact'; // Import halaman baru
 import Category from './pages/Category';
 import Footer from './components/Footer';
 import { dummyProducts } from './data/dummyData'; // Import data dummy
+import AuthModal from './components/AuthModal'; // Import modal
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State untuk status login
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); // State untuk modal
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -70,12 +72,25 @@ function App() {
   };
 
   // Fungsi untuk handle login/logout (simulasi)
-  const handleLoginToggle = () => {
-    setIsLoggedIn(!isLoggedIn);
-    showNotification(
-      !isLoggedIn ? 'Anda berhasil login!' : 'Anda telah logout.',
-      'success'
-    );
+  const handleAuthAction = () => {
+    if (isLoggedIn) {
+      // Jika sudah login, lakukan logout
+      setIsLoggedIn(false);
+      showNotification('Anda telah logout.', 'success'); // Notifikasi logout tetap ada
+    } else {
+      // Jika belum login, buka modal
+      setIsAuthModalOpen(true);
+    }
+  };
+
+  const handleCloseAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true); // Ubah status menjadi login
+    setIsAuthModalOpen(false); // Tutup modal
+    showNotification('Anda berhasil login!', 'success'); // Tampilkan notifikasi
   };
 
   const showNotification = (message, type) => {
@@ -123,7 +138,7 @@ function App() {
           setMobileMenuOpen={setMobileMenuOpen}
           scrolled={scrolled}
           isLoggedIn={isLoggedIn}
-          onLoginToggle={handleLoginToggle}
+          onAuthAction={handleAuthAction}
         />
         
         <Routes>
@@ -148,6 +163,12 @@ function App() {
         </Routes>
 
         <Footer />
+
+        <AuthModal 
+          isOpen={isAuthModalOpen} 
+          onClose={handleCloseAuthModal} 
+          onLoginSuccess={handleLoginSuccess} 
+        />
         
         <style>{`
           @keyframes slideIn {

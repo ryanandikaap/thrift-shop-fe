@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ProductCard from '../components/ProductCard';
+import ProductCard from '../components/ProductCard'; // Pastikan path ini benar
 import { Filter, XCircle } from 'lucide-react';
 
 const Products = ({ products, onAddToCart, onToggleFavorite }) => {

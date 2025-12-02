@@ -555,13 +555,16 @@
   margin-top: 40px;
 }
 
+.product-card-wrapper {
+  height: 100%;
+}
+
 .product-card {
   background: var(--white);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: var(--transition);
-  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -569,6 +572,23 @@
 }
 
 .product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-card-link:hover .product-header h3 {
+  color: var(--primary);
+}
+
+.product-card-wrapper:hover .product-card {
   transform: translateY(-10px);
   box-shadow: var(--shadow-lg);
 }
@@ -597,7 +617,7 @@
   transition: transform 0.6s ease;
 }
 
-.product-card:hover .product-image img {
+.product-card-wrapper:hover .product-image img {
   transform: scale(1.05);
 }
 
@@ -618,7 +638,7 @@
 }
 
 .favorite-btn {
-  position: absolute;
+  position: absolute; /* Tombol favorit tetap di atas kartu */
   top: 20px;
   right: 20px;
   background: rgba(255, 255, 255, 0.9);
@@ -2249,6 +2269,239 @@ html {
 
 .bg-gradient {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+/* --- Product Detail Page Styles --- */
+
+.product-detail-page {
+  padding: 60px 0;
+  background: var(--white);
+}
+
+.breadcrumb {
+  margin-bottom: 40px;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.breadcrumb a {
+  color: var(--text-light);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.breadcrumb a:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+.detail-image-section {
+  position: sticky;
+  top: 120px;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.favorite-btn-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: var(--neutral-light);
+  border: 2px solid var(--neutral);
+  color: var(--text-light);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.favorite-btn-detail:hover {
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.favorite-btn-detail.active {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: var(--white);
+}
+
+.product-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.product-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-light);
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+}
+
+.meta-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.meta-rating svg { fill: currentColor; }
+
+.meta-divider {
+  color: var(--neutral-dark);
+}
+
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: var(--neutral-light);
+  border-radius: var(--radius);
+}
+
+.price-section .current-price { font-size: 2rem; }
+.price-section .original-price { font-size: 1.2rem; }
+.discount-tag {
+  background: var(--warning);
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+
+.product-description-detail {
+  color: var(--text-light);
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.product-specs {
+  border-top: 1px solid var(--neutral);
+  border-bottom: 1px solid var(--neutral);
+  padding: 20px 0;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spec-item {
+  display: flex;
+  gap: 8px;
+  font-size: 1rem;
+}
+.spec-item span { color: var(--text-light); }
+.spec-item a { color: var(--primary); font-weight: 600; text-decoration: none; }
+.spec-item a:hover { text-decoration: underline; }
+
+.actions-section {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--neutral);
+  border-radius: var(--radius);
+}
+.quantity-selector button {
+  background: none;
+  border: none;
+  padding: 14px;
+  cursor: pointer;
+  color: var(--text);
+}
+.quantity-selector span {
+  padding: 0 16px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.buy-now-btn-detail, .add-to-cart-btn-detail {
+  padding: 16px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: var(--transition);
+}
+
+.buy-now-btn-detail { background: var(--primary); color: var(--white); }
+.add-to-cart-btn-detail { background: var(--secondary); color: var(--white); }
+.buy-now-btn-detail:hover { background: var(--primary-dark); }
+.add-to-cart-btn-detail:hover { background: var(--secondary-dark); }
+
+.guarantees {
+  display: flex;
+  justify-content: space-around;
+  background: var(--neutral-light);
+  padding: 20px;
+  border-radius: var(--radius);
+}
+.guarantee-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+.guarantee-item svg { color: var(--success); }
+
+.related-products-section {
+  margin-top: 80px;
+  padding-top: 60px;
+  border-top: 1px solid var(--neutral);
+}
+.related-products-section h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 992px) {
+  .detail-grid { grid-template-columns: 1fr; }
+  .detail-image-section { position: static; }
+}
+
+@media (max-width: 576px) {
+  .actions-section { grid-template-columns: 1fr; }
+  .quantity-selector { justify-content: center; }
 }
 
 /* --- Contact Page Styles --- */

@@ -4,6 +4,7 @@ import Header from './components/Header'; // Pastikan file ini ada atau buat bar
 import Home from './pages/Home';
 import Products from './pages/Products';
 import AboutUs from './pages/AboutUs'; 
+import ProductDetail from './pages/ProductDetail'; // Import halaman baru
 import Contact from './pages/Contact'; // Import halaman baru
 import Category from './pages/Category';
 import Footer from './components/Footer';
@@ -156,6 +157,13 @@ function App() {
               onToggleFavorite={handleToggleFavorite}
             />
             
+          } />
+          <Route path="/produk/:id" element={
+            <ProductDetail 
+              products={products}
+              onAddToCart={handleAddToCart}
+              onToggleFavorite={handleToggleFavorite}
+            />
           } />
           <Route path="/kategori" element={<Category />} />
           <Route path="/tentang-kami" element={<AboutUs />} />

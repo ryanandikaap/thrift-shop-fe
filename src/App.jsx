@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
+import Header from './components/Header'; // Pastikan file ini ada atau buat baru
 import Home from './pages/Home';
 import Products from './pages/Products';
+import AboutUs from './pages/AboutUs'; 
+import Category from './pages/Category';
 import Footer from './components/Footer';
 import { dummyProducts } from './data/dummyData'; // Import data dummy
 import './App.css';
@@ -13,6 +15,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State untuk status login
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -65,6 +68,15 @@ function App() {
     );
   };
 
+  // Fungsi untuk handle login/logout (simulasi)
+  const handleLoginToggle = () => {
+    setIsLoggedIn(!isLoggedIn);
+    showNotification(
+      !isLoggedIn ? 'Anda berhasil login!' : 'Anda telah logout.',
+      'success'
+    );
+  };
+
   const showNotification = (message, type) => {
     // Hapus notifikasi sebelumnya jika ada
     const existingNotifications = document.querySelectorAll('.notification');
@@ -109,6 +121,8 @@ function App() {
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
           scrolled={scrolled}
+          isLoggedIn={isLoggedIn}
+          onLoginToggle={handleLoginToggle}
         />
         
         <Routes>
@@ -125,7 +139,10 @@ function App() {
               onAddToCart={handleAddToCart}
               onToggleFavorite={handleToggleFavorite}
             />
+            
           } />
+          <Route path="/kategori" element={<Category />} />
+          <Route path="/tentang-kami" element={<AboutUs />} />
         </Routes>
 
         <Footer />

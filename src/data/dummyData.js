@@ -1,280 +1,201 @@
-export const dummyProducts = [
-  {
-    id: 1,
-    name: "Denim Jaket Vintage",
-    price: 249000,
-    originalPrice: 450000,
-    category: "Jaket",
-    size: "M",
-    condition: "Bagus",
-    description: "Denim jaket dengan motif vintage yang unik, cocok untuk gaya kasual.",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.5,
-    isNew: true,
-    isFavorite: false
-  },
-  {
-    id: 2,
-    name: "Kemeja Flanel Kotak-kotak",
-    price: 129000,
-    originalPrice: 250000,
-    category: "Kemeja",
-    size: "L",
-    condition: "Sangat Bagus",
-    description: "Kemeja flanel hangat dengan motif kotak-kotak klasik.",
-    image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.2,
-    isNew: false,
-    isFavorite: true
-  },
-  {
-    id: 3,
-    name: "Celana Chino Coklat",
-    price: 179000,
-    originalPrice: 320000,
-    category: "Celana",
-    size: "32",
-    condition: "Bagus",
-    description: "Celana chino slim fit dengan warna coklat tanah yang elegan.",
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.7,
-    isNew: true,
-    isFavorite: false
-  },
-  {
-    id: 4,
-    name: "Dress Polka Dot Vintage",
-    price: 199000,
-    originalPrice: 380000,
-    category: "Dress",
-    size: "S",
-    condition: "Baik",
-    description: "Dress dengan motif polka dot yang memberikan kesan retro yang anggun.",
-    image: "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.8,
-    isNew: false,
-    isFavorite: true
-  },
-  {
-    id: 5,
-    name: "Sweater Rajut Cream",
-    price: 159000,
-    originalPrice: 280000,
-    category: "Sweater",
-    size: "M",
-    condition: "Sangat Bagus",
-    description: "Sweater rajut dengan bahan lembut dan warna cream yang hangat.",
-    image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.4,
-    isNew: false,
-    isFavorite: false
-  },
-  {
-    id: 6,
-    name: "Sepatu Boots Kulit Coklat",
-    price: 349000,
-    originalPrice: 650000,
-    category: "Sepatu",
-    size: "41",
-    condition: "Bagus",
-    description: "Sepatu boots kulit asli dengan gaya vintage yang kokoh.",
-    image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.9,
-    isNew: true,
-    isFavorite: false
-  },
-  {
-    id: 7,
-    name: "Tas Ransel Denim",
-    price: 189000,
-    originalPrice: 350000,
-    category: "Aksesoris",
-    size: "One Size",
-    condition: "Baik",
-    description: "Tas ransel denim dengan beberapa kompartemen dan gaya kasual.",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.3,
-    isNew: false,
-    isFavorite: false
-  },
-
-  {
-    id: 8,
-    name: "Blazer Tweed Classic",
-    price: 299000,
-    originalPrice: 550000,
-    category: "Jaket",
-    size: "L",
-    condition: "Bagus",
-    description: "Blazer tweed dengan potongan klasik yang cocok untuk acara formal.",
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.6,
-    isNew: true,
-    isFavorite: true
-  },
-
-    {
-    id: 9,
-    name: "Kemeja Linen Putih",
-    price: 139000,
-    originalPrice: 250000,
-    category: "Kemeja",
-    size: "L",
-    condition: "Sangat Bagus",
-    description: "Kemeja linen putih yang nyaman dipakai dengan bahan breathable.",
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.3,
-    isNew: false,
-    isFavorite: false
-  },
-  {
-    id: 10,
-    name: "Celana Jeans Tapered",
-    price: 189000,
-    originalPrice: 350000,
-    category: "Celana",
-    size: "32",
-    condition: "Bagus",
-    description: "Celana jeans tapered dengan potongan modern dan warna wash yang menarik.",
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.6,
-    isNew: true,
-    isFavorite: false
-  },
-  {
-    id: 11,
-    name: "Sweatshirt Hoodie Grey",
-    price: 169000,
-    originalPrice: 300000,
-    category: "Sweater",
-    size: "XL",
-    condition: "Baik",
-    description: "Sweatshirt hoodie dengan bahan tebal dan nyaman untuk cuaca dingin.",
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.4,
-    isNew: false,
-    isFavorite: true
-  },
-  {
-    id: 12,
-    name: "Tas Selempang Kulit",
-    price: 229000,
-    originalPrice: 420000,
-    category: "Aksesoris",
-    size: "One Size",
-    condition: "Sangat Bagus",
-    description: "Tas selempang kulit sintetis dengan beberapa kompartemen yang praktis.",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.7,
-    isNew: true,
-    isFavorite: false
-  },
-  {
-    id: 13,
-    name: "Kaos Polo Vintage",
-    price: 99000,
-    originalPrice: 180000,
-    category: "Kemeja",
-    size: "M",
-    condition: "Baik",
-    description: "Kaos polo dengan logo vintage dan bahan katun yang lembut.",
-    image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.2,
-    isNew: false,
-    isFavorite: false
-  },
-  {
-    id: 14,
-    name: "Rok Midi Kotak-kotak",
-    price: 149000,
-    originalPrice: 280000,
-    category: "Dress",
-    size: "M",
-    condition: "Bagus",
-    description: "Rok midi dengan motif kotak-kotak yang cocok untuk gaya casual atau formal.",
-    image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.5,
-    isNew: true,
-    isFavorite: true
-  },
-  {
-    id: 15,
-    name: "Sneakers Canvas Vintage",
-    price: 199000,
-    originalPrice: 380000,
-    category: "Sepatu",
-    size: "42",
-    condition: "Baik",
-    description: "Sneakers canvas dengan desain vintage dan sol yang nyaman.",
-    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.8,
-    isNew: false,
-    isFavorite: false
-  },
-  {
-    id: 16,
-    name: "Jaket Bomber Kulit Sintetis",
-    price: 329000,
-    originalPrice: 600000,
-    category: "Jaket",
-    size: "L",
-    condition: "Sangat Bagus",
-    description: "Jaket bomber dengan bahan kulit sintetis dan detail jahitan premium.",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-    rating: 4.9,
-    isNew: true,
-    isFavorite: false
-  }
-];
-
-export const categories = [
-  "Semua",
-  "Jaket",
-  "Kemeja",
-  "Celana",
-  "Dress",
-  "Sweater",
-  "Sepatu",
-  "Aksesoris"
-];
+export const categories = ["Semua", "Pakaian", "Sepatu", "Aksesoris"];
 
 export const features = [
   {
-    icon: "Truck",
-    title: "Gratis Ongkir",
-    description: "Untuk pembelian di atas Rp 300.000"
+    icon: 'Truck',
+    title: 'Pengiriman Cepat & Aman',
+    description: 'Kami memastikan barang thrift Anda sampai dengan cepat dan dalam kondisi terbaik.'
   },
   {
-    icon: "Shield",
-    title: "Kualitas Terjamin",
-    description: "Semua produk sudah melalui proses kurasi"
+    icon: 'Shield',
+    title: 'Transaksi Terjamin',
+    description: 'Setiap transaksi dilindungi, memberikan Anda ketenangan saat berbelanja.'
   },
   {
-    icon: "RotateCcw",
-    title: "Garansi 7 Hari",
-    description: "Pengembalian jika tidak sesuai"
+    icon: 'RotateCcw',
+    title: 'Pengembalian Mudah',
+    description: 'Tidak puas dengan barang? Proses pengembalian kami mudah dan tanpa ribet.'
   }
 ];
 
-// Data untuk filter
-export const conditions = [
-  "Semua Kondisi",
-  "Sangat Bagus",
-  "Bagus",
-  "Baik"
-];
-
-export const sizes = [
-  "Semua Ukuran",
-  "XS", "S", "M", "L", "XL",
-  "28", "30", "32", "34",
-  "38", "40", "42", "44"
-];
-
-export const sortOptions = [
-  { value: "default", label: "Default" },
-  { value: "price-low", label: "Harga Terendah" },
-  { value: "price-high", label: "Harga Tertinggi" },
-  { value: "newest", label: "Terbaru" },
-  { value: "popular", label: "Paling Populer" }
+export const dummyProducts = [
+  // Pakaian
+  {
+    id: 1,
+    name: 'Kemeja Flanel Vintage',
+    price: 150000,
+    originalPrice: 250000,
+    discount: 40,
+    image: 'https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: true,
+    isFavorite: false,
+    rating: 4.8,
+    reviews: 120,
+    description: 'Kemeja flanel vintage dengan bahan tebal dan nyaman, cocok untuk gaya kasual sehari-hari.',
+    size: 'L',
+    condition: 'Sangat Baik',
+    category: 'Pakaian'
+  },
+  {
+    id: 2,
+    name: 'Jaket Denim Klasik',
+    price: 220000,
+    originalPrice: null,
+    discount: null,
+    image: 'https://images.unsplash.com/photo-1543072214-6b2a5a01ace5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: true,
+    rating: 4.9,
+    reviews: 250,
+    description: 'Jaket denim abadi yang tidak pernah ketinggalan zaman. Kondisi seperti baru.',
+    size: 'M',
+    condition: 'Seperti Baru',
+    category: 'Pakaian'
+  },
+  {
+    id: 7,
+    name: 'Sweater Rajut Oversized',
+    price: 135000,
+    originalPrice: 200000,
+    discount: 33,
+    image: 'https://images.unsplash.com/photo-1582138124327-a775b3b333b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: false,
+    rating: 4.7,
+    reviews: 88,
+    description: 'Sweater rajut hangat dengan model oversized yang trendi. Warna krem netral.',
+    size: 'All Size',
+    condition: 'Baik',
+    category: 'Pakaian'
+  },
+  {
+    id: 8,
+    name: 'Celana Jeans Cutbray',
+    price: 160000,
+    originalPrice: null,
+    discount: null,
+    image: 'https://images.unsplash.com/photo-1604176354204-926873782855?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: false,
+    rating: 4.6,
+    reviews: 75,
+    description: 'Celana jeans model cutbray (bootcut) yang memberikan siluet retro. High-waist.',
+    size: '29',
+    condition: 'Sangat Baik',
+    category: 'Pakaian'
+  },
+  {
+    id: 19,
+    name: 'Gaun Pesta Vintage',
+    price: 275000,
+    originalPrice: 600000,
+    discount: 54,
+    image: 'https://images.unsplash.com/photo-1595777457587-43314a5aee93?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: true,
+    rating: 4.9,
+    reviews: 40,
+    description: 'Gaun pesta elegan dari era 80-an dengan detail payet. Hanya dipakai sekali.',
+    size: 'S',
+    condition: 'Sangat Baik',
+    category: 'Pakaian'
+  },
+  // Sepatu
+  {
+    id: 3,
+    name: 'Sneakers Kanvas Putih',
+    price: 180000,
+    originalPrice: 300000,
+    discount: 40,
+    image: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: false,
+    rating: 4.7,
+    reviews: 95,
+    description: 'Sneakers kanvas putih serbaguna, cocok dipadukan dengan berbagai outfit.',
+    size: '42',
+    condition: 'Baik',
+    category: 'Sepatu'
+  },
+  {
+    id: 4,
+    name: 'Sepatu Boots Kulit',
+    price: 350000,
+    originalPrice: null,
+    discount: null,
+    image: 'https://images.unsplash.com/photo-1529344029-d2d9a6343a42?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: true,
+    isFavorite: false,
+    rating: 5.0,
+    reviews: 50,
+    description: 'Sepatu boots kulit asli dengan desain tangguh dan elegan. Belum pernah dipakai.',
+    size: '43',
+    condition: 'Baru',
+    category: 'Sepatu'
+  },
+  {
+    id: 9,
+    name: 'Loafers Kulit Coklat',
+    price: 280000,
+    originalPrice: 600000,
+    discount: 53,
+    image: 'https://images.unsplash.com/photo-1603808033192-082d6919d3e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: true,
+    rating: 4.9,
+    reviews: 112,
+    description: 'Sepatu loafers dari kulit asli, cocok untuk acara formal maupun semi-formal.',
+    size: '41',
+    condition: 'Sangat Baik',
+    category: 'Sepatu'
+  },
+  {
+    id: 10,
+    name: 'Sandal Platform',
+    price: 95000,
+    originalPrice: null,
+    discount: null,
+    image: 'https://images.unsplash.com/photo-1562273138-5916283c0fe3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: false,
+    rating: 4.5,
+    reviews: 60,
+    description: 'Sandal platform yang nyaman untuk dipakai sehari-hari. Tali dari bahan kanvas.',
+    size: '39',
+    condition: 'Baik',
+    category: 'Sepatu'
+  },
+  // Aksesoris
+  {
+    id: 5,
+    name: 'Topi Trucker Vintage',
+    price: 85000,
+    originalPrice: 150000,
+    discount: 43,
+    image: 'https://images.unsplash.com/photo-1562159899-69921c35b533?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: true,
+    rating: 4.9,
+    reviews: 180,
+    description: 'Jam tangan analog dengan strap kulit asli, memberikan kesan mewah dan klasik.',
+    size: 'N/A',
+    condition: 'Sangat Baik',
+    category: 'Aksesoris'
+  },
+  {
+    id: 12,
+    name: 'Topi Baseball Polos',
+    price: 60000,
+    originalPrice: null,
+    discount: null,
+    image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e394?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60',
+    isNew: false,
+    isFavorite: false,
+    rating: 4.6,
+    reviews: 150,
+    description: 'Topi baseball bahan katun warna navy. Kondisi sangat baik, jarang dipakai.',
+    size: 'Adjustable',
+    condition: 'Sangat Baik',
+    category: 'Aksesoris'
+  },
 ];

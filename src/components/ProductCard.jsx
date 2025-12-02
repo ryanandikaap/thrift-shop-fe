@@ -1,63 +1,74 @@
 import React from 'react';
-import { ShoppingBag, Star, Heart } from 'lucide-react';
+import { Heart, ShoppingCart, Star } from 'lucide-react';
 
 const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
-  const calculateDiscount = (price, originalPrice) => {
-    return Math.round(((originalPrice - price) / originalPrice) * 100);
-  };
-
-  const handleFavoriteClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onToggleFavorite(product.id);
-  };
-
-  const handleAddToCartClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onAddToCart(product);
-  };
+  const { 
+    id, 
+    name, 
+    price, 
+    originalPrice, 
+    discount, 
+    image, 
+    isNew, 
+    isFavorite, 
+    rating, 
+    reviews, 
+    description, 
+    size, 
+    condition 
+  } = product;
 
   return (
     <div className="product-card">
       <div className="product-image">
-        <img src={product.image} alt={product.name} />
-        {product.isNew && <span className="new-badge">Baru</span>}
+        <img src={image} alt={name} />
+        {isNew && <span className="new-badge">Baru</span>}
+        {discount && <span className="discount-badge">-{discount}%</span>}
         <button 
-          className={`favorite-btn ${product.isFavorite ? 'active' : ''}`}
-          onClick={handleFavoriteClick}
-          aria-label={product.isFavorite ? "Remove from favorites" : "Add to favorites"}
+          className={`favorite-btn ${isFavorite ? 'active' : ''}`} 
+          onClick={() => onToggleFavorite(id)}
+          aria-label={isFavorite ? "Hapus dari favorit" : "Tambahkan ke favorit"}
         >
-          <Heart size={20} fill={product.isFavorite ? "currentColor" : "none"} />
+          <Heart size={20} fill={isFavorite ? 'currentColor' : 'none'} />
         </button>
-        <div className="discount-badge">
-          -{calculateDiscount(product.price, product.originalPrice)}%
-        </div>
       </div>
       <div className="product-info">
         <div className="product-header">
-          <h3>{product.name}</h3>
+          <h3>{name}</h3>
           <div className="price">
-            <span className="current-price">Rp {product.price.toLocaleString('id-ID')}</span>
-            <span className="original-price">Rp {product.originalPrice.toLocaleString('id-ID')}</span>
+            <span className="current-price">Rp{price.toLocaleString('id-ID')}</span>
+            {originalPrice && <span className="original-price">Rp{originalPrice.toLocaleString('id-ID')}</span>}
           </div>
         </div>
-        <p className="product-description">{product.description}</p>
+        <p className="product-description">
+          {description.length > 100 ? description.substring(0, 100) + '...' : description}
+        </p>
         <div className="product-details">
-          <span className="size">Ukuran: {product.size}</span>
-          <span className="condition">Kondisi: {product.condition}</span>
+          {size && (
+            <div className="size">
+              <span>Ukuran</span>
+              <span>{size}</span>
+            </div>
+          )}
+          {condition && (
+            <div className="condition">
+              <span>Kondisi</span>
+              <span>{condition}</span>
+            </div>
+          )}
         </div>
         <div className="product-footer">
           <div className="rating">
             <Star size={16} fill="currentColor" />
-            <span>{product.rating}</span>
+            <span>{rating} ({reviews})</span>
           </div>
           <button 
-            className="add-to-cart-btn"
-            onClick={handleAddToCartClick}
+            className="add-to-cart-btn" 
+            onClick={() => onAddToCart(product)}
+            aria-label="Tambahkan ke keranjang"
           >
-            <ShoppingBag size={18} />
-            Tambah
+            <ShoppingCart size={18} />
+            <span>Tambah</span>
           </button>
         </div>
       </div>

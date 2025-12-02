@@ -1,117 +1,83 @@
 import React from 'react';
-import { ShoppingBag, Search, Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { ShoppingCart, Search, Menu, X, LogIn, LogOut, Tag } from 'lucide-react';
 
 const Header = ({ 
   cart, 
   searchQuery, 
   setSearchQuery, 
   mobileMenuOpen, 
-  setMobileMenuOpen,
-  scrolled 
+  setMobileMenuOpen, 
+  scrolled,
+  isLoggedIn,
+  onLoginToggle 
 }) => {
-  const location = useLocation();
-  
-  // Fungsi untuk mengecek apakah link aktif
-  const isActive = (path) => {
-    if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
-    return false;
-  };
+
+  const navLinks = [
+    { path: "/", name: "Home" },
+    { path: "/produk", name: "Produk" },
+    { path: "/kategori", name: "Kategori" },
+    { path: "/tentang-kami", name: "Tentang Kami" },
+  ];
 
   return (
     <header className={`header ${scrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="header-content">
-          <button 
-            className="mobile-menu-btn" 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-          
-          <Link to="/" className="logo">
-            <ShoppingBag size={28} />
+          <a href="/" className="logo">
+            <Tag size={32} />
             <h1>Thrift<span>Style</span></h1>
-          </Link>
-          
+          </a>
+
           <nav className={`nav ${mobileMenuOpen ? 'open' : ''}`}>
             <ul>
-              <li>
-                <Link 
-                  to="/" 
-                  className={isActive('/') ? 'active' : ''}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Beranda
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/produk" 
-                  className={isActive('/produk') ? 'active' : ''}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Produk
-                </Link>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  Kategori
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  Tentang Kami
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  Kontak
-                </a>
-              </li>
+              {navLinks.map(link => (
+                <li key={link.path}>
+                  <NavLink to={link.path} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                    {link.name}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </nav>
-          
+
           <div className="header-actions">
             <div className="search-box">
               <Search size={20} />
               <input 
                 type="text" 
-                placeholder="Cari produk thrift..." 
+                placeholder="Cari produk..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search products"
               />
             </div>
-            
-            <button 
-              className="cart-btn"
-              aria-label={`Shopping cart with ${cart.length} items`}
-            >
-              <ShoppingBag size={22} />
+
+            <button className="cart-btn" aria-label="Lihat keranjang belanja">
+              <ShoppingCart size={22} />
               {cart.length > 0 && <span className="cart-count">{cart.length}</span>}
             </button>
+
+            {isLoggedIn ? (
+              <button className="login-btn" onClick={onLoginToggle} aria-label="Logout">
+                <LogOut size={22} />
+                <span>Logout</span>
+              </button>
+            ) : (
+              <button className="login-btn" onClick={onLoginToggle} aria-label="Login">
+                <LogIn size={22} />
+                <span>Login</span>
+              </button>
+            )}
+
           </div>
+
+          <button 
+            className="mobile-menu-btn" 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
     </header>

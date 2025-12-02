@@ -4,6 +4,7 @@ import Header from './components/Header'; // Pastikan file ini ada atau buat bar
 import Home from './pages/Home';
 import Products from './pages/Products';
 import AboutUs from './pages/AboutUs'; 
+import Contact from './pages/Contact'; // Import halaman baru
 import Category from './pages/Category';
 import Footer from './components/Footer';
 import { dummyProducts } from './data/dummyData'; // Import data dummy
@@ -143,6 +144,7 @@ function App() {
           } />
           <Route path="/kategori" element={<Category />} />
           <Route path="/tentang-kami" element={<AboutUs />} />
+          <Route path="/kontak" element={<Contact />} />
         </Routes>
 
         <Footer />

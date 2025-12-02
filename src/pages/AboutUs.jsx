@@ -19,7 +19,7 @@ const AboutUs = () => {
       <section className="page-hero about-hero">
         <div className="container">
           <div className="page-hero-content">
-            <h1>Tentang **ThriftStyle**</h1>
+            <h1>Tentang <span className="text-gradient-light">ThriftStyle</span></h1>
             <p>Misi kami adalah membawa gaya unik dan berkelanjutan melalui pakaian preloved berkualitas tinggi.</p>
           </div>
         </div>
@@ -35,17 +35,17 @@ const AboutUs = () => {
               
               <div className="mission-points">
                 <div className="point-card">
-                  <Leaf size={32} className="icon-green" />
+                  <div className="point-card-icon icon-green"><Leaf size={28} /></div>
                   <h4>Keberlanjutan (Sustainability)</h4>
                   <p>Mengurangi limbah tekstil dengan memperpanjang siklus hidup pakaian.</p>
                 </div>
                 <div className="point-card">
-                  <Award size={32} className="icon-gold" />
+                  <div className="point-card-icon icon-gold"><Award size={28} /></div>
                   <h4>Kualitas & Kurasi</h4>
                   <p>Memastikan setiap barang memiliki kualitas terbaik melalui proses kurasi yang ketat.</p>
                 </div>
                 <div className="point-card">
-                  <Users size={32} className="icon-blue" />
+                  <div className="point-card-icon icon-blue"><Users size={28} /></div>
                   <h4>Komunitas Gaya</h4>
                   <p>Membangun komunitas pecinta mode yang menghargai keunikan dan nilai dari barang bekas.</p>
                 </div>

@@ -18,6 +18,7 @@ const Header = ({
     { path: "/produk", name: "Produk" },
     { path: "/kategori", name: "Kategori" },
     { path: "/tentang-kami", name: "Tentang Kami" },
+    { path: "/kontak", name: "Kontak" },
   ];
 
   return (

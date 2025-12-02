@@ -1,7 +1,13 @@
 import React from 'react';
 import { Truck, Shield, RotateCcw } from 'lucide-react';
-import { features } from '../data/dummyData';
 
+// Data fitur sekarang didefinisikan di sini, bukan dari dummyData.js
+const features = [
+  { title: 'Pengiriman Cepat & Aman', description: 'Kami memastikan produk sampai ke tangan Anda dengan cepat dan aman.', icon: 'Truck' },
+  { title: 'Jaminan Kualitas', description: 'Setiap produk telah melalui proses kurasi dan pengecekan kualitas yang ketat.', icon: 'Shield' },
+  { title: 'Pengembalian Mudah', description: 'Tidak puas? Kami menyediakan proses pengembalian yang mudah dan tanpa ribet.', icon: 'RotateCcw' },
+];
+ 
 const Features = () => {
   const getIconComponent = (iconName) => {
     switch(iconName) {

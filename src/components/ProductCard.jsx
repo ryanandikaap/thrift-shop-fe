@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
   const {
-    id,
+    _id, // Gunakan _id dari MongoDB
     name,
     price,
     originalPrice,
     discount,
     image,
-    isNew,
+    isNewArrival,
     isFavorite,
     rating,
     description,
@@ -26,10 +26,10 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
   return (
     <div className="product-card-wrapper">
       <div className="product-card">
-        <Link to={`/produk/${id}`} className="product-card-link">
+        <Link to={`/produk/${_id}`} className="product-card-link">
           <div className="product-image">
-            <img src={image} alt={name} loading="lazy" />
-            {isNew && <span className="new-badge">Baru</span>}
+            <img src={image.startsWith('http') ? image : `http://localhost:5000${image}`} alt={name} loading="lazy" />
+            {isNewArrival && <span className="new-badge">Baru</span>}
             {discount && <span className="discount-badge">-{discount}%</span>}
           </div>
           <div className="product-info">
@@ -71,7 +71,7 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
         </div>
         <button 
           className={`favorite-btn ${isFavorite ? 'active' : ''}`} 
-          onClick={() => onToggleFavorite(id)}
+          onClick={() => onToggleFavorite(_id)}
           aria-label="Toggle Favorite"
         >
           <Heart size={20} />

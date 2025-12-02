@@ -10,7 +10,7 @@ const ProductGrid = ({ products, onAddToCart, onToggleFavorite }) => {
     <div className="products-grid">
       {products.map(product => (
         <ProductCard 
-          key={product.id} 
+          key={product._id} 
           product={product}
           onAddToCart={onAddToCart}
           onToggleFavorite={onToggleFavorite}

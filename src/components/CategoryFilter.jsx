@@ -1,5 +1,7 @@
 import React from 'react';
-import { categories } from '../data/dummyData';
+
+// Data kategori sekarang didefinisikan di sini, bukan dari dummyData.js
+const categories = ["Semua", "Pakaian", "Sepatu", "Aksesoris"];
 
 const CategoryFilter = ({ selectedCategory, onCategorySelect }) => {
   return (

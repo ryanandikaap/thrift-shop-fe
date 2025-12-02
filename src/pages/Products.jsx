@@ -52,11 +52,11 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
         break;
       case 'newest':
         // Asumsi produk dengan ID lebih tinggi adalah yang terbaru
-        tempProducts.sort((a, b) => b.id - a.id);
+        tempProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
       default:
         // Urutan default (berdasarkan ID)
-        tempProducts.sort((a, b) => a.id - b.id);
+        tempProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
     }
 
@@ -141,7 +141,7 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
         <div className="products-grid">
           {filteredProducts.length > 0 ? (
             currentProducts.map(product => (
-              <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} onToggleFavorite={onToggleFavorite} />
+              <ProductCard key={product._id} product={product} onAddToCart={onAddToCart} onToggleFavorite={onToggleFavorite} />
             ))
           ) : (
             <div className="no-products-found">

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { dummyProducts } from '../data/dummyData';
 import { Star, Minus, Plus, ShoppingCart, ShoppingBag, Heart, ArrowLeft, CheckCircle, Shield, Truck } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 
@@ -11,30 +10,47 @@ const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    const productId = parseInt(id, 10);
-    // Gunakan 'products' dari props agar status 'isFavorite' selalu update
-    const foundProduct = products.find(p => p.id === productId);
-    
-    if (foundProduct) {
-      setProduct(foundProduct);
-      
-      // Cari produk terkait (kategori sama, id berbeda)
-      const related = products
-        .filter(p => p.category === foundProduct.category && p.id !== foundProduct.id)
-        .slice(0, 4); // Tampilkan hingga 4 produk terkait
-      setRelatedProducts(related);
-    }
+    const fetchProductDetail = async () => {
+      try {
+        // 1. Ambil data produk utama
+        const response = await fetch(`http://localhost:5000/api/products/${id}`);
+        if (!response.ok) throw new Error('Produk tidak ditemukan');
+        const productData = await response.json();
+
+        // Cek status favorit dari 'products' di state App.jsx
+        const parentProductState = products.find(p => p._id === productData._id);
+        const finalProduct = { ...productData, isFavorite: parentProductState?.isFavorite || false };
+
+        setProduct(finalProduct);
+
+        // 2. Ambil semua produk untuk mencari produk terkait (jika belum ada)
+        // Di aplikasi nyata, ini bisa jadi endpoint API terpisah: /api/products/related/:id
+        if (products.length > 0) {
+            const related = products
+              .filter(p => p.category === productData.category && p._id !== productData._id)
+              .slice(0, 4);
+            setRelatedProducts(related);
+        }
+
+      } catch (error) {
+        console.error("Error fetching product detail:", error);
+        setProduct(null); // Set product jadi null jika error
+      }
+    };
+
+    fetchProductDetail();
 
     // Scroll ke atas saat halaman dimuat
     window.scrollTo(0, 0);
 
   }, [id, products]);
 
+  // Tampilkan loading state
   if (!product) {
     return (
       <main className="container" style={{ padding: '80px 0', textAlign: 'center' }}>
-        <h2>Produk tidak ditemukan</h2>
-        <p>Produk yang Anda cari mungkin telah dihapus atau tidak tersedia.</p>
+        <h2>Memuat produk...</h2>
+        <p>Jika produk tidak muncul, mungkin produk tersebut tidak tersedia.</p>
         <Link to="/produk" className="cta-btn" style={{ marginTop: '20px' }}>
           <ArrowLeft size={18} /> Kembali ke Produk
         </Link>
@@ -63,10 +79,10 @@ const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
         </div>
         <div className="detail-grid">
           <div className="detail-image-section">
-            <img src={product.image} alt={product.name} className="main-image" />
+            <img src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.name} className="main-image" />
             <button 
               className={`favorite-btn-detail ${product.isFavorite ? 'active' : ''}`} 
-              onClick={() => onToggleFavorite(product.id)}
+              onClick={() => onToggleFavorite(product._id)}
             >
               <Heart size={22} />
               {product.isFavorite ? 'Favorit' : 'Tambahkan ke Favorit'}
@@ -126,7 +142,7 @@ const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
             <div className="products-grid">
               {relatedProducts.map(relatedProduct => (
                 <ProductCard 
-                  key={relatedProduct.id} 
+                  key={relatedProduct._id} 
                   product={relatedProduct} 
                   onAddToCart={onAddToCart} 
                   onToggleFavorite={onToggleFavorite} 

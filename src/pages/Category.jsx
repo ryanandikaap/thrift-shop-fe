@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shirt, Footprints, Watch, ArrowRight } from 'lucide-react';
-import { categories as categoryNames } from '../data/dummyData'; // Import kategori dari dummyData
+
+// Data kategori sekarang didefinisikan di sini, bukan dari dummyData.js
+const categoryNames = ["Pakaian", "Sepatu", "Aksesoris"];
 
 // Data visual untuk setiap kategori
 const categoryDetails = {

@@ -6,6 +6,18 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
     return Math.round(((originalPrice - price) / originalPrice) * 100);
   };
 
+  const handleFavoriteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleFavorite(product.id);
+  };
+
+  const handleAddToCartClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onAddToCart(product);
+  };
+
   return (
     <div className="product-card">
       <div className="product-image">
@@ -13,7 +25,8 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
         {product.isNew && <span className="new-badge">Baru</span>}
         <button 
           className={`favorite-btn ${product.isFavorite ? 'active' : ''}`}
-          onClick={() => onToggleFavorite(product.id)}
+          onClick={handleFavoriteClick}
+          aria-label={product.isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           <Heart size={20} fill={product.isFavorite ? "currentColor" : "none"} />
         </button>
@@ -41,7 +54,7 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
           </div>
           <button 
             className="add-to-cart-btn"
-            onClick={() => onAddToCart(product)}
+            onClick={handleAddToCartClick}
           >
             <ShoppingBag size={18} />
             Tambah

@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import Features from './components/Features';
-import CategoryFilter from './components/CategoryFilter';
-import ProductGrid from './components/ProductGrid';
+import Home from './pages/Home';
+import Products from './pages/Products';
 import Footer from './components/Footer';
-import { dummyProducts } from './data/dummyData';
+import { dummyProducts } from './data/dummyData'; // Import data dummy
 import './App.css';
 
 function App() {
-  const [products, setProducts] = useState(dummyProducts);
   const [cart, setCart] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [products, setProducts] = useState(dummyProducts); // Tambah state products
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false); // Tambah state untuk scroll
+  const [scrolled, setScrolled] = useState(false);
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -43,13 +41,39 @@ function App() {
 
   const handleAddToCart = (product) => {
     setCart([...cart, product]);
-    
-    // Create a better notification (non-blocking)
     showNotification(`${product.name} ditambahkan ke keranjang!`, 'success');
   };
 
+  const handleToggleFavorite = (productId) => {
+    // Update status favorite di state products
+    setProducts(prevProducts => 
+      prevProducts.map(product => 
+        product.id === productId 
+          ? { ...product, isFavorite: !product.isFavorite } 
+          : product
+      )
+    );
+    
+    // Tampilkan notifikasi berdasarkan status baru
+    const product = products.find(p => p.id === productId);
+    const isNowFavorite = !product?.isFavorite;
+    showNotification(
+      isNowFavorite 
+        ? 'Ditambahkan ke favorit!' 
+        : 'Dihapus dari favorit', 
+      'success'
+    );
+  };
+
   const showNotification = (message, type) => {
-    // Create notification element
+    // Hapus notifikasi sebelumnya jika ada
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    });
+
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
@@ -68,7 +92,6 @@ function App() {
     
     document.body.appendChild(notification);
     
-    // Remove after 2.5 seconds
     setTimeout(() => {
       if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
@@ -76,105 +99,62 @@ function App() {
     }, 2500);
   };
 
-  const handleToggleFavorite = (productId) => {
-    setProducts(products.map(product => 
-      product.id === productId 
-        ? { ...product, isFavorite: !product.isFavorite } 
-        : product
-    ));
-  };
-
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === "Semua" || product.category === selectedCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         product.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
   return (
-    <div className="app">
-      <Header 
-        cart={cart}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        mobileMenuOpen={mobileMenuOpen}
-        setMobileMenuOpen={setMobileMenuOpen}
-        scrolled={scrolled} // Tambahkan prop scrolled
-      />
-      
-      <Hero />
-      
-      <Features />
-      
-      <main className="main-content">
-        <div className="container">
-          <div className="page-header">
-            <h2>Produk Thrift Terbaru</h2>
-            <p>Temukan barang-barang unik dengan kisah di baliknya</p>
-          </div>
-
-          <CategoryFilter 
-            selectedCategory={selectedCategory}
-            onCategorySelect={setSelectedCategory}
-          />
-
-          {filteredProducts.length === 0 ? (
-            <div className="no-products">
-              <div className="no-products-content">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.35-4.35" />
-                </svg>
-                <h3>Produk tidak ditemukan</h3>
-                <p>Coba cari dengan kata kunci lain atau pilih kategori berbeda</p>
-                <button 
-                  className="clear-filter-btn"
-                  onClick={() => {
-                    setSelectedCategory("Semua");
-                    setSearchQuery("");
-                  }}
-                >
-                  Reset Filter
-                </button>
-              </div>
-            </div>
-          ) : (
-            <ProductGrid 
-              products={filteredProducts}
+    <Router>
+      <div className="app">
+        <Header 
+          cart={cart}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
+          scrolled={scrolled}
+        />
+        
+        <Routes>
+          <Route path="/" element={
+            <Home 
+              products={products} // Kirim products ke Home
               onAddToCart={handleAddToCart}
               onToggleFavorite={handleToggleFavorite}
             />
-          )}
-        </div>
-      </main>
+          } />
+          <Route path="/produk" element={
+            <Products 
+              products={products} // Kirim products ke Products
+              onAddToCart={handleAddToCart}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          } />
+        </Routes>
 
-      <Footer />
-      
-      {/* Add notification animation styles */}
-      <style>{`
-        @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
+        <Footer />
         
-        @keyframes fadeOut {
-          from {
-            opacity: 1;
-            transform: translateX(0);
+        <style>{`
+          @keyframes slideIn {
+            from {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+            to {
+              transform: translateX(0);
+              opacity: 1;
+            }
           }
-          to {
-            opacity: 0;
-            transform: translateX(100%);
+          
+          @keyframes fadeOut {
+            from {
+              opacity: 1;
+              transform: translateX(0);
+            }
+            to {
+              opacity: 0;
+              transform: translateX(100%);
+            }
           }
-        }
-      `}</style>
-    </div>
+        `}</style>
+      </div>
+    </Router>
   );
 }
 

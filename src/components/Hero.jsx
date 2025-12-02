@@ -7,7 +7,9 @@ const Hero = () => {
         <div className="hero-content">
           <h2>Temukan Gaya Unik dengan Barang Preloved</h2>
           <p>Jelajahi koleksi pakaian dan aksesoris bekas berkualitas dengan harga terjangkau. Dukung gaya berkelanjutan!</p>
-          <button className="cta-btn">Jelajahi Koleksi</button>
+          <a href="/produk" className="cta-btn">
+                Jelajahi Koleksi →
+              </a>
         </div>
       </div>
     </section>

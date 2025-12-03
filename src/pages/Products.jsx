@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard'; // Pastikan path ini benar
 import { Filter, XCircle } from 'lucide-react';
-
-const Products = ({ products, onAddToCart, onToggleFavorite }) => {
+const Products = ({ products, onAddToCart, onToggleFavorite, showNotification, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [filteredProducts, setFilteredProducts] = useState(products);
@@ -11,18 +10,15 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
   const [activeCategory, setActiveCategory] = useState('');
   const [sortOption, setSortOption] = useState('');
 
-  // State untuk paginasi
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8; // Tampilkan 8 produk per halaman
-
+  const productsPerPage = 8;
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const categoryParam = queryParams.get('kategori');
 
     let tempProducts = [...products];
-
-    // 1. Filter berdasarkan Kategori
+ 
     if (categoryParam) {
       const lowerCaseCategoryParam = categoryParam.toLowerCase();
       tempProducts = tempProducts.filter(product => 
@@ -33,7 +29,6 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
       setActiveCategory('');
     }
 
-    // 2. Filter berdasarkan Pencarian
     if (searchQuery) {
       const lowerCaseSearchQuery = searchQuery.toLowerCase();
       tempProducts = tempProducts.filter(product =>
@@ -42,36 +37,30 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
       );
     }
 
-    // 3. Terapkan Pengurutan (Sorting)
     switch (sortOption) {
       case 'price-asc':
         tempProducts.sort((a, b) => a.price - b.price);
         break;
       case 'price-desc':
-        tempProducts.sort((a, b) => b.price - a.price);
+        tempProducts.sort((a, b) => b.price - a.price); 
         break;
       case 'newest':
-        // Asumsi produk dengan ID lebih tinggi adalah yang terbaru
         tempProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
       default:
-        // Urutan default (berdasarkan ID)
         tempProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
     }
 
     setFilteredProducts(tempProducts);
-    setCurrentPage(1); // Reset ke halaman pertama setiap kali filter berubah
+    setCurrentPage(1);
 
-  }, [location.search, products, searchQuery, sortOption]); // Tambahkan dependensi baru
+  }, [location.search, products, searchQuery, sortOption]);
 
   const handleClearFilter = () => {
-    // Hapus parameter kategori dari URL dan tampilkan semua produk
     navigate('/produk');
     setActiveCategory('');
   };
-
-  // Logika untuk paginasi
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -99,14 +88,11 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
             <h2>Semua Produk</h2>
             <p className="product-count">{filteredProducts.length} produk ditemukan</p>
           </div>
-          {/* Anda bisa menambahkan elemen lain di sini seperti sorting atau view toggle */}
           <div className="products-header-right">
-            {/* Contoh: Tombol filter untuk mobile */}
             <button className="filter-toggle-btn">
               <Filter size={20} />
               Filter
             </button>
-            {/* Dropdown sorting yang sudah berfungsi */}
             <div className="sort-dropdown">
               <select 
                 className="sort-select" 
@@ -120,7 +106,6 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
               </select>
               <span className="sort-arrow">▼</span>
             </div>
-            {/* Tambahkan input pencarian di sini jika diperlukan, atau gunakan dari header */}
           </div>
         </div>
 
@@ -141,7 +126,14 @@ const Products = ({ products, onAddToCart, onToggleFavorite }) => {
         <div className="products-grid">
           {filteredProducts.length > 0 ? (
             currentProducts.map(product => (
-              <ProductCard key={product._id} product={product} onAddToCart={onAddToCart} onToggleFavorite={onToggleFavorite} />
+              <ProductCard 
+                key={product._id} 
+                product={product} 
+                onAddToCart={onAddToCart} 
+                onToggleFavorite={onToggleFavorite}
+                showNotification={showNotification}
+                user={user}
+              />
             ))
           ) : (
             <div className="no-products-found">

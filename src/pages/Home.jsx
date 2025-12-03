@@ -5,19 +5,18 @@ import CategoryFilter from '../components/CategoryFilter';
 import ProductGrid from '../components/ProductGrid';
 import '../App.css';
 
-const Home = ({ products, onAddToCart, onToggleFavorite }) => {
+const Home = ({ products, onAddToCart, onToggleFavorite, showNotification, user }) => {
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter produk untuk homepage (hanya tampilkan 8 produk teratas)
   const filteredProducts = products
     .filter(product => {
       const matchesCategory = selectedCategory === "Semua" || product.category === selectedCategory;
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
-    })
-    .slice(0, 8); // Batasi hanya 8 produk di homepage
+    }) 
+    .slice(0, 8);
 
   return (
     <>
@@ -62,11 +61,12 @@ const Home = ({ products, onAddToCart, onToggleFavorite }) => {
               products={filteredProducts}
               onAddToCart={onAddToCart}
               onToggleFavorite={onToggleFavorite}
+              showNotification={showNotification}
+              user={user}
             />
           )}
 
-          {/* CTA Section */}
-          <div className="cta-section">
+          <div className="cta-section"> 
             <div className="cta-content">
               <h3>Ingin melihat lebih banyak produk?</h3>
               <p>Jelajahi koleksi lengkap kami dengan ratusan barang thrift berkualitas.</p>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Leaf, Award, Users, Truck, Shield, RotateCcw } from 'lucide-react';
 
-// Data fitur sekarang didefinisikan di sini, bukan dari dummyData.js
 const features = [
   { title: 'Pengiriman Cepat & Aman', description: 'Kami memastikan produk sampai ke tangan Anda dengan cepat dan aman.', icon: 'Truck' },
   { title: 'Jaminan Kualitas', description: 'Setiap produk telah melalui proses kurasi dan pengecekan kualitas yang ketat.', icon: 'Shield' },
@@ -21,7 +20,6 @@ const getIconComponent = (iconName) => {
 const AboutUs = () => {
   return (
     <div className="about-us-page">
-      {/* Hero Section */}
       <section className="page-hero about-hero">
         <div className="container">
           <div className="page-hero-content">
@@ -33,7 +31,6 @@ const AboutUs = () => {
 
       <main className="about-main">
         <div className="container">
-          {/* Visi dan Misi */}
           <div className="section-block mission-vision">
             <div className="text-content">
               <h2>Menciptakan Mode yang Berkelanjutan</h2>
@@ -57,15 +54,12 @@ const AboutUs = () => {
                 </div>
               </div>
             </div>
-            {/* Mengganti komentar placeholder dengan div untuk gambar dummy */}
             <div className="image-placeholder about-image-1">
                 
             </div>
           </div>
           
           <hr />
-
-          {/* Proses Kami */}
           <div className="section-block reverse-layout">
             <div className="image-placeholder about-image-2">
                 
@@ -83,8 +77,6 @@ const AboutUs = () => {
           </div>
           
           <hr />
-
-          {/* Nilai Jaminan (Menggunakan fitur yang ada) */}
           <div className="section-block text-center" style={{ gridTemplateColumns: '1fr' }}>
             <h2>Nilai-Nilai Kami</h2>
             <p className="subtitle">Kami menjamin pengalaman berbelanja yang aman dan memuaskan.</p>

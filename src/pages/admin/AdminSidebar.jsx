@@ -1,12 +1,15 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Package, Users, ShoppingCart, LogOut } from 'lucide-react';
 
 const AdminSidebar = () => {
-  // Fungsi logout bisa ditambahkan di sini jika diperlukan
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-    // Logika untuk logout
-    console.log("Logout clicked");
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    navigate('/');
+    window.location.reload();
   };
 
   return (
@@ -18,13 +21,13 @@ const AdminSidebar = () => {
       <nav className="sidebar-nav">
         <NavLink to="/admin/dashboard" className="sidebar-link">
           <LayoutDashboard size={20} />
-          <span>Dasbor Admin</span>
+          <span>Dashboard</span>
         </NavLink>
         <NavLink to="/admin/products" className="sidebar-link">
           <Package size={20} />
           <span>Produk</span>
         </NavLink>
-        <NavLink to="/admin/users" className="sidebar-link disabled-link">
+        <NavLink to="/admin/users" className="sidebar-link">
           <Users size={20} />
           <span>Pengguna</span>
         </NavLink>
@@ -33,7 +36,12 @@ const AdminSidebar = () => {
           <span>Pesanan</span>
         </NavLink>
       </nav>
-      {/* Bisa ditambahkan tombol logout di bawah */}
+      <div className="sidebar-footer" style={{ marginTop: 'auto' }}>
+        <button onClick={handleLogout} className="sidebar-link logout-btn">
+          <LogOut size={20} />
+          <span>Logout</span>
+        </button>
+      </div>
     </aside>
   );
 };

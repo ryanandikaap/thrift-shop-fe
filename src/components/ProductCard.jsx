@@ -1,10 +1,10 @@
 import React from 'react';
 import { Star, Heart, ShoppingCart, ShoppingBag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
+const ProductCard = ({ product, onAddToCart, onToggleFavorite, showNotification, user, onAuthAction }) => {
   const {
-    _id, // Gunakan _id dari MongoDB
+    _id, 
     name,
     price,
     originalPrice,
@@ -18,9 +18,19 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
     condition,
   } = product;
 
-  const handleBuyNow = (product) => {
-    // Simulasi: langsung ke halaman checkout atau menampilkan ringkasan
-    alert(`Simulasi: Anda membeli ${product.name} sekarang!`);
+  const navigate = useNavigate();
+
+  const handleBuyNow = (e) => {
+    e.preventDefault();
+    navigate(`/produk/${_id}`);
+  };
+
+  const handleAddToCart = () => {
+    onAddToCart(product);
+  };
+
+  const handleFavoriteClick = () => {
+    onToggleFavorite(_id);
   };
 
   return (
@@ -59,11 +69,11 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
             <span>{rating}</span>
           </div>
           <div className="product-actions">
-            <button className="buy-now-btn" onClick={() => handleBuyNow(product)} aria-label={`Beli ${name}`}>
+            <button onClick={handleBuyNow} className="buy-now-btn" aria-label={`Beli ${name}`}>
               <ShoppingBag size={18} />
               <span>Beli</span>
             </button>
-            <button className="add-to-cart-btn" onClick={() => onAddToCart(product)} aria-label={`Tambah ${name} ke keranjang`}>
+            <button className="add-to-cart-btn" onClick={handleAddToCart} aria-label={`Tambah ${name} ke keranjang`}>
               <ShoppingCart size={18} />
               <span>Keranjang</span>
             </button>
@@ -71,7 +81,7 @@ const ProductCard = ({ product, onAddToCart, onToggleFavorite }) => {
         </div>
         <button 
           className={`favorite-btn ${isFavorite ? 'active' : ''}`} 
-          onClick={() => onToggleFavorite(_id)}
+          onClick={handleFavoriteClick}
           aria-label="Toggle Favorite"
         >
           <Heart size={20} />

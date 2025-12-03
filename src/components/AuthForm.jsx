@@ -15,8 +15,7 @@ const AuthForm = ({ isLogin, onSubmit, showNotification }) => {
     setIsLoading(true);
     try {
       await onSubmit({ username, password });
-    } catch (error) {
-      // Error sudah ditangani di AuthModal, di sini hanya reset loading state
+    } catch (error) { 
     } finally {
       setIsLoading(false);
     }

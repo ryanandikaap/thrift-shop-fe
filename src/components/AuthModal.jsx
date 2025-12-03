@@ -41,14 +41,15 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
       showNotification(data.message, 'success');
 
       if (isLogin) {
-        onLoginSuccess(data.token, data.user); // Kirim token dan data user ke App.jsx
+        if (data.user && data.user.role === 'admin') {
+          throw new Error('Akun admin tidak dapat login melalui form ini.');
+        }
+        onLoginSuccess(data.token, data.user);
       } else {
-        // Setelah registrasi berhasil, alihkan ke mode login
         setIsLogin(true);
       }
     } catch (error) {
       showNotification(error.message, 'warning');
-      // Re-throw error agar form tahu proses gagal
       throw error;
     }
   };

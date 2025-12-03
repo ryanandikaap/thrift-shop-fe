@@ -1,44 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header'; // Pastikan file ini ada atau buat baru
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Header from './components/Header'; 
 import Home from './pages/Home';
 import Products from './pages/Products';
 import AboutUs from './pages/AboutUs'; 
-import ProductDetail from './pages/ProductDetail'; // Import halaman baru
-import Contact from './pages/Contact'; // Import halaman baru
-import AdminProductList from './pages/admin/AdminProductList'; // Import list produk admin
-import AdminLayout from './pages/admin/AdminLayout'; // Import layout admin
-import AdminProductForm from './pages/admin/AdminProductForm'; // Import form produk admin
-import AdminDashboard from './pages/admin/AdminDashboard'; // Import dasbor admin
-import ProtectedRoute from './components/ProtectedRoute'; // Import rute terproteksi
+import ProductDetail from './pages/ProductDetail'; 
+import Contact from './pages/Contact'; 
+import AdminProductList from './pages/admin/AdminProductList'; 
+import AdminLayout from './pages/admin/AdminLayout'; 
+import AdminProductForm from './pages/admin/AdminProductForm'; 
+import AdminLoginPage from './pages/admin/AdminLoginPage'; 
+import AdminDashboard from './pages/admin/AdminDashboard'; 
+import AdminUserList from './pages/admin/AdminUserList'; 
+import ProtectedRoute from './components/ProtectedRoute'; 
+import CheckoutPage from './pages/CheckoutPage'; 
+import PaymentPage from './pages/PaymentPage'; 
+import CartPage from './pages/CartPage'; 
 import Category from './pages/Category';
+import UserProfilePage from './pages/UserProfilePage'; 
+import WishlistPage from './pages/WishlistPage'; 
+import HowToShop from './pages/HowToShop'; 
+import ReturnsPolicy from './pages/ReturnsPolicy'; 
+import PrivacyPolicy from './pages/PrivacyPolicy'; 
+import TermsAndConditions from './pages/TermsAndConditions'; 
 import Footer from './components/Footer';
-import AuthModal from './components/AuthModal'; // Import modal
+import AuthModal from './components/AuthModal'; 
+import OrderHistory from './components/OrderHistory'; 
+import ProfileEditor from './components/ProfileEditor'; 
 import './App.css';
 
 function App() {
   const [cart, setCart] = useState([]);
-  const [products, setProducts] = useState([]); // Inisialisasi dengan array kosong
+  const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState(null); // Ganti isLoggedIn dengan state user
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); // State untuk modal
+  const [user, setUser] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // Cek token saat aplikasi pertama kali dimuat
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    const userData = localStorage.getItem('user');
-    if (token && userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (e) {
-        // Handle error jika JSON tidak valid
-      }
-    }
-  }, []);
-
-  // Mengambil data produk dari backend saat aplikasi dimuat
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -47,19 +46,57 @@ function App() {
           throw new Error('Gagal mengambil data produk');
         }
         const data = await response.json();
-        // Tambahkan properti isFavorite ke setiap produk jika belum ada
         const productsWithFavorite = data.map(p => ({ ...p, isFavorite: false }));
         setProducts(productsWithFavorite);
       } catch (error) {
         console.error("Error fetching products:", error);
-        // Di sini Anda bisa menampilkan notifikasi error kepada pengguna
       }
     };
 
     fetchProducts();
-  }, []); // Array kosong berarti efek ini hanya berjalan sekali saat komponen dimuat
+  }, []);
 
-  // Handle scroll effect for header
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('user');
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+        fetchWishlist(token);
+      } catch (e) {
+        console.error("Gagal parse data user:", e);
+        handleLogout(false);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
+
+  const syncWishlistWithProducts = (wishlistProductIds) => {
+    setProducts(prevProducts =>
+      prevProducts.map(p => ({
+        ...p,
+        isFavorite: wishlistProductIds.includes(p._id),
+      }))
+    );
+  };
+
+  const fetchWishlist = async (token) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/users/wishlist', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        throw new Error('Gagal mengambil wishlist');
+      }
+      const wishlistData = await response.json();
+      if (wishlistData.wishlist) {
+        syncWishlistWithProducts(wishlistData.wishlist);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 50;
@@ -72,7 +109,6 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
 
-  // Fungsi untuk close mobile menu saat klik di luar
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (mobileMenuOpen && !e.target.closest('.nav') && !e.target.closest('.mobile-menu-btn')) {
@@ -85,12 +121,51 @@ function App() {
   }, [mobileMenuOpen]);
 
   const handleAddToCart = (product) => {
-    setCart([...cart, product]);
-    showNotification(`${product.name} ditambahkan ke keranjang!`, 'success');
+    if (!user) {
+      handleAuthAction();
+      showNotification('Silakan login untuk menambahkan item ke keranjang.', 'warning');
+      return;
+    }
+
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item._id === product._id);
+      if (existingItem) {
+        return prevCart.map(item =>
+          item._id === product._id
+            ? { ...item, quantity: item.quantity + (product.quantity || 1) }
+            : item
+        );
+      } else {
+        return [...prevCart, { ...product, quantity: product.quantity || 1 }];
+      }
+    }); 
+    showNotification(`${product.name} (x${product.quantity || 1}) ditambahkan ke keranjang!`, 'success');
   };
 
-  const handleToggleFavorite = (productId) => {
-    // Update status favorite di state products
+  const handleRemoveFromCart = (productId) => {
+    setCart(prevCart => prevCart.filter(item => item._id !== productId));
+    showNotification('Item dihapus dari keranjang.', 'success');
+  };
+
+  const handleUpdateCartQuantity = (productId, newQuantity) => {
+    if (newQuantity < 1) return;
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item._id === productId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  const handleToggleFavorite = async (productId) => {
+    if (!user) {
+      handleAuthAction();
+      showNotification('Silakan login untuk menambahkan ke favorit.', 'warning');
+      return;
+    }
+
+    const product = products.find(p => p._id === productId);
+    const isCurrentlyFavorite = product?.isFavorite;
+
     setProducts(prevProducts => 
       prevProducts.map(product => 
         product._id === productId 
@@ -98,28 +173,39 @@ function App() {
           : product
       )
     );
-    
-    // Tampilkan notifikasi berdasarkan status baru
-    const product = products.find(p => p._id === productId);
-    const isNowFavorite = !product?.isFavorite;
-    showNotification(
-      isNowFavorite 
-        ? 'Ditambahkan ke favorit!' 
-        : 'Dihapus dari favorit', 
-      'success'
-    );
+    try {
+      const token = localStorage.getItem('authToken');
+      const method = isCurrentlyFavorite ? 'DELETE' : 'POST';
+      const response = await fetch(`http://localhost:5000/api/users/wishlist/${productId}`, {
+        method,
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!response.ok) throw new Error('Gagal memperbarui wishlist');
+
+      const data = await response.json();
+      showNotification(data.message, 'success');
+
+    } catch (error) {
+      showNotification(error.message, 'warning');
+      setProducts(prevProducts => 
+        prevProducts.map(product => 
+          product._id === productId 
+            ? { ...product, isFavorite: isCurrentlyFavorite }
+            : product
+        )
+      );
+    }
   };
 
-  // Fungsi untuk handle login/logout (simulasi)
-  const handleAuthAction = () => {
+  const handleAuthAction = (showNotif = true) => { 
     if (user) {
-      // Jika sudah login, lakukan logout
-      localStorage.removeItem('authToken'); // Hapus token dari storage
-      localStorage.removeItem('user'); // Hapus data user dari storage
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
       setUser(null);
-      showNotification('Anda telah logout.', 'success'); // Notifikasi logout tetap ada
+      syncWishlistWithProducts([]);
+      if (showNotif) showNotification('Anda telah logout.', 'success');
     } else {
-      // Jika belum login, buka modal
       setIsAuthModalOpen(true);
     }
   };
@@ -129,21 +215,25 @@ function App() {
 
   const handleLoginSuccess = (token, userData) => {
     localStorage.setItem('authToken', token);
-    localStorage.setItem('user', JSON.stringify(userData)); // Simpan data user
-    setUser(userData); // Set state user
-    handleCloseAuthModal(); // Tutup modal
-    showNotification('Anda berhasil login!', 'success'); // Tampilkan notifikasi
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+    fetchWishlist(token);
+    handleCloseAuthModal();
+    showNotification('Anda berhasil login!', 'success');
+  };
+
+  const handleUserUpdate = (updatedUserData) => {
+    setUser(updatedUserData);
+    localStorage.setItem('user', JSON.stringify(updatedUserData));
   };
 
   const showNotification = (message, type) => {
-    // Hapus notifikasi sebelumnya jika ada
     const existingNotifications = document.querySelectorAll('.notification');
     existingNotifications.forEach(notification => {
       if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
       }
     });
-
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
@@ -156,8 +246,8 @@ function App() {
       padding: 15px 25px;
       border-radius: 8px;
       z-index: 10000;
-      animation: slideIn 0.3s ease, fadeOut 0.3s ease 2s forwards;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: slideInAndOut 3.5s ease-in-out forwards;
     `;
     
     document.body.appendChild(notification);
@@ -166,7 +256,7 @@ function App() {
       if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
       }
-    }, 2500);
+    }, 3500);
   };
 
   return (
@@ -179,24 +269,30 @@ function App() {
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
           scrolled={scrolled}
-          isLoggedIn={!!user} // Kirim boolean status login
-          userRole={user?.role} // Kirim role user
+          user={user}
+          userRole={user?.role}
           onAuthAction={handleAuthAction}
         />
         
         <Routes>
           <Route path="/" element={
             <Home 
-              products={products} // Kirim products ke Home
+              products={products} 
               onAddToCart={handleAddToCart}
               onToggleFavorite={handleToggleFavorite}
+              showNotification={showNotification}
+              user={user}
+              onAuthAction={handleAuthAction}
             />
           } />
           <Route path="/produk" element={
             <Products 
-              products={products} // Kirim products ke Products
+              products={products} 
               onAddToCart={handleAddToCart}
               onToggleFavorite={handleToggleFavorite}
+              showNotification={showNotification}
+              user={user}
+              onAuthAction={handleAuthAction}
             />
             
           } />
@@ -205,14 +301,84 @@ function App() {
               products={products}
               onAddToCart={handleAddToCart}
               onToggleFavorite={handleToggleFavorite}
+              showNotification={showNotification}
+              onAuthAction={handleAuthAction}
             />
           } />
           <Route path="/kategori" element={<Category />} />
           <Route path="/tentang-kami" element={<AboutUs />} />
           <Route path="/kontak" element={<Contact />} />
 
-          {/* Rute Admin yang Dilindungi */}
+          <Route path="/cara-berbelanja" element={<HowToShop />} /> <Route path="/kebijakan-pengembalian" element={<ReturnsPolicy />} />
+          <Route path="/kebijakan-privasi" element={<PrivacyPolicy />} /> <Route path="/syarat-ketentuan" element={<TermsAndConditions />} />
+
           <Route 
+            path="/keranjang"
+            element={
+              <CartPage
+                cart={cart}
+                onUpdateCartQuantity={handleUpdateCartQuantity}
+                onRemoveFromCart={handleRemoveFromCart}
+                user={user}
+                onAuthAction={handleAuthAction}
+              />}
+          />
+          <Route 
+            path="/wishlist"
+            element={user ? 
+              <WishlistPage
+                products={products}
+                onAddToCart={handleAddToCart}
+                onToggleFavorite={handleToggleFavorite}
+                showNotification={showNotification}
+                user={user}
+                onAuthAction={handleAuthAction}
+              /> : <Navigate to="/" replace />}
+          />
+
+          <Route 
+            path="/profil"
+            element={user ?
+              <UserProfilePage
+                user={user}
+                onUserUpdate={handleUserUpdate}
+                showNotification={showNotification}
+              /> : <Navigate to="/" replace />
+            }
+          />
+
+          <Route  
+            path="/checkout/:id" 
+            element={user ? 
+              <CheckoutPage user={user} showNotification={showNotification} cart={cart} /> : 
+              <Navigate to="/" replace />
+            } 
+          />
+          <Route
+            path="/checkout/cart"
+            element={user ?
+              <CheckoutPage user={user} showNotification={showNotification} cart={cart} /> :
+              <Navigate to="/" replace />
+            }
+          />
+
+          <Route  
+            path="/payment/:orderId"
+            element={user ?
+              <PaymentPage showNotification={showNotification} /> :
+              <Navigate to="/" replace />
+            }
+          />
+
+          <Route  
+            path="/admin/login" 
+            element={<AdminLoginPage 
+              onLoginSuccess={handleLoginSuccess}
+              showNotification={showNotification}
+            />} 
+          />
+
+          <Route  
             path="/admin" 
             element={
               <ProtectedRoute>
@@ -222,6 +388,7 @@ function App() {
           >
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="products" element={<AdminProductList />} />
+            <Route path="users" element={<AdminUserList showNotification={showNotification} />} />
             <Route path="products/new" element={<AdminProductForm />} />
             <Route path="products/edit/:id" element={<AdminProductForm />} />
           </Route>
@@ -237,25 +404,18 @@ function App() {
         />
         
         <style>{`
-          @keyframes slideIn {
-            from {
-              transform: translateX(100%);
+          @keyframes slideInAndOut {
+            0% {
+              transform: translateX(calc(100% + 20px));
               opacity: 0;
             }
-            to {
+            15%, 85% {
               transform: translateX(0);
               opacity: 1;
             }
-          }
-          
-          @keyframes fadeOut {
-            from {
-              opacity: 1;
-              transform: translateX(0);
-            }
-            to {
+            100% {
+              transform: translateX(calc(100% + 20px));
               opacity: 0;
-              transform: translateX(100%);
             }
           }
         `}</style>

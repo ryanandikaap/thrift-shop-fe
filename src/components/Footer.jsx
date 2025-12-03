@@ -1,5 +1,6 @@
 import React from 'react';
 import { ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -9,7 +10,7 @@ const Footer = () => {
           <div className="footer-section">
             <div className="logo">
               <ShoppingBag size={24} />
-              <h3>Thrift<span>Style</span></h3>
+              <h3>ThriftStyle</h3>
             </div>
             <p>Membawa gaya berkelanjutan ke dalam hidup Anda dengan pilihan barang thrift berkualitas.</p>
           </div>
@@ -17,20 +18,20 @@ const Footer = () => {
           <div className="footer-section">
             <h4>Kategori</h4>
             <ul>
-              <li><a href="#">Pakaian Pria</a></li>
-              <li><a href="#">Pakaian Wanita</a></li>
-              <li><a href="#">Aksesoris</a></li>
-              <li><a href="#">Sepatu</a></li>
+              <li><Link to="/produk?kategori=pakaian">Pakaian</Link></li>
+              <li><Link to="/produk?kategori=sepatu">Sepatu</Link></li>
+              <li><Link to="/produk?kategori=aksesoris">Aksesoris</Link></li>
+              <li><Link to="/produk">Semua Produk</Link></li>
             </ul>
           </div>
           
           <div className="footer-section">
             <h4>Bantuan</h4>
             <ul>
-              <li><a href="#">Cara Berbelanja</a></li>
-              <li><a href="#">Pengembalian</a></li>
-              <li><a href="#">Kebijakan Privasi</a></li>
-              <li><a href="#">Syarat & Ketentuan</a></li>
+              <li><Link to="/cara-berbelanja">Cara Berbelanja</Link></li>
+              <li><Link to="/kebijakan-pengembalian">Pengembalian</Link></li>
+              <li><Link to="/kebijakan-privasi">Kebijakan Privasi</Link></li>
+              <li><Link to="/syarat-ketentuan">Syarat & Ketentuan</Link></li>
             </ul>
           </div>
           
@@ -43,7 +44,7 @@ const Footer = () => {
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; 2023 ThriftStyle. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} ThriftStyle. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -141,7 +141,6 @@ const AdminProductForm = () => {
                 </div>
               )}
             </div>
-            {/* Input tersembunyi untuk menyimpan path gambar */}
             <input type="hidden" name="image" value={product.image} required />
           </div>
           <div className="form-group">

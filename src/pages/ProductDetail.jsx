@@ -1,91 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Star, Minus, Plus, ShoppingCart, ShoppingBag, Heart, ArrowLeft, CheckCircle, Shield, Truck } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Star, Minus, Plus, ShoppingCart, ShoppingBag, Heart, ArrowLeft, Shield, Truck, RotateCcw } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 
-const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
+const ProductDetail = ({ products, onAddToCart, onToggleFavorite, showNotification, user, onAuthAction }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
-
+  const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
-    const fetchProductDetail = async () => {
+    const fetchProduct = async () => {
+      setLoading(true);
       try {
-        // 1. Ambil data produk utama
         const response = await fetch(`http://localhost:5000/api/products/${id}`);
-        if (!response.ok) throw new Error('Produk tidak ditemukan');
-        const productData = await response.json();
-
-        // Cek status favorit dari 'products' di state App.jsx
-        const parentProductState = products.find(p => p._id === productData._id);
-        const finalProduct = { ...productData, isFavorite: parentProductState?.isFavorite || false };
-
-        setProduct(finalProduct);
-
-        // 2. Ambil semua produk untuk mencari produk terkait (jika belum ada)
-        // Di aplikasi nyata, ini bisa jadi endpoint API terpisah: /api/products/related/:id
-        if (products.length > 0) {
-            const related = products
-              .filter(p => p.category === productData.category && p._id !== productData._id)
-              .slice(0, 4);
-            setRelatedProducts(related);
+        if (!response.ok) {
+          throw new Error('Produk tidak ditemukan');
         }
-
+        const productData = await response.json();
+        setProduct(productData);
+        
+        const related = products 
+          .filter(p => p.category === productData.category && p._id !== productData._id)
+          .slice(0, 4);
+        setRelatedProducts(related);
+        
       } catch (error) {
-        console.error("Error fetching product detail:", error);
-        setProduct(null); // Set product jadi null jika error
+        console.error("Error fetching product:", error);
+        setProduct(null);
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchProductDetail();
-
-    // Scroll ke atas saat halaman dimuat
+    
+    fetchProduct();
     window.scrollTo(0, 0);
-
   }, [id, products]);
 
-  // Tampilkan loading state
-  if (!product) {
-    return (
-      <main className="container" style={{ padding: '80px 0', textAlign: 'center' }}>
-        <h2>Memuat produk...</h2>
-        <p>Jika produk tidak muncul, mungkin produk tersebut tidak tersedia.</p>
-        <Link to="/produk" className="cta-btn" style={{ marginTop: '20px' }}>
-          <ArrowLeft size={18} /> Kembali ke Produk
-        </Link>
-      </main>
-    );
-  }
+  const handleBuyNow = () => {
+    if (!user) {
+      onAuthAction();
+      return;
+    }
+    navigate(`/checkout/${id}`);
+  };
 
   const handleQuantityChange = (amount) => {
     setQuantity(prev => Math.max(1, prev + amount));
   };
 
-  const handleBuyNow = () => {
-    alert(`Simulasi: Membeli ${quantity} x ${product.name}`);
+  const handleAddToCartWithQuantity = () => {
+    onAddToCart({ ...product, quantity });
+    showNotification(`${product.name} (x${quantity}) ditambahkan ke keranjang.`, 'success');
   };
 
-  const handleAddToCartWithQuantity = () => {
-    // Simulasi menambahkan produk dengan kuantitas
-    onAddToCart({ ...product, quantity });
+  const handleFavoriteClick = () => {
+    onToggleFavorite(product._id);
   };
+
+  if (loading) {
+    return <div className="container" style={{ padding: '80px 0', textAlign: 'center' }}>Memuat detail produk...</div>;
+  }
+
+  if (!product) {
+    return (
+      <div className="container" style={{ padding: '80px 0', textAlign: 'center' }}>
+        <h2>Produk tidak ditemukan</h2>
+        <p>Produk yang Anda cari mungkin sudah tidak tersedia.</p>
+        <Link to="/produk" className="cta-btn" style={{ marginTop: '20px' }}>
+          <ArrowLeft size={18} /> Kembali ke Produk
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <main className="product-detail-page">
+    <div className="product-detail-page">
       <div className="container">
-        <div className="breadcrumb">
-          <Link to="/">Home</Link> / <Link to="/produk">Produk</Link> / <span>{product.name}</span>
-        </div>
+        <Link to="/produk" className="breadcrumb">
+          <ArrowLeft size={16} /> Kembali ke Produk
+        </Link>
         <div className="detail-grid">
           <div className="detail-image-section">
             <img src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.name} className="main-image" />
-            <button 
-              className={`favorite-btn-detail ${product.isFavorite ? 'active' : ''}`} 
-              onClick={() => onToggleFavorite(product._id)}
+            <button
+              className={`favorite-btn-detail ${product.isFavorite ? 'active' : ''}`}
+              onClick={handleFavoriteClick}
             >
-              <Heart size={22} />
-              {product.isFavorite ? 'Favorit' : 'Tambahkan ke Favorit'}
+              <Heart size={20} /> {product.isFavorite ? 'Favorit' : 'Tambahkan ke Favorit'}
             </button>
           </div>
 
@@ -93,7 +97,7 @@ const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
             <h1 className="product-title">{product.name}</h1>
             <div className="product-meta">
               <div className="meta-rating">
-                <Star size={20} /> {product.rating} ({product.reviews} ulasan)
+                <Star size={16} /> {product.rating} ({product.reviews} ulasan)
               </div>
               <span className="meta-divider">|</span>
               <div className="meta-condition">Kondisi: <strong>{product.condition}</strong></div>
@@ -110,7 +114,7 @@ const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
             <p className="product-description-detail">{product.description}</p>
 
             <div className="product-specs">
-              <div className="spec-item"><span>Kategori:</span> <Link to={`/produk?kategori=${product.category.toLowerCase()}`}>{product.category}</Link></div>
+              <div className="spec-item"><span>Kategori:</span> <Link to={`/produk?kategori=${product.category}`}>{product.category}</Link></div>
               <div className="spec-item"><span>Ukuran:</span> <strong>{product.size}</strong></div>
             </div>
 
@@ -120,18 +124,18 @@ const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
                 <span>{quantity}</span>
                 <button onClick={() => handleQuantityChange(1)}><Plus size={18} /></button>
               </div>
-              <button className="buy-now-btn-detail" onClick={handleBuyNow}>
-                <ShoppingBag size={20} /> Beli Sekarang
-              </button>
               <button className="add-to-cart-btn-detail" onClick={handleAddToCartWithQuantity}>
                 <ShoppingCart size={20} /> Tambah Keranjang
+              </button>
+              <button className="buy-now-btn-detail" onClick={handleBuyNow}>
+                <ShoppingBag size={20} /> Beli Sekarang
               </button>
             </div>
 
             <div className="guarantees">
-              <div className="guarantee-item"><CheckCircle size={18} /> <span>Produk Terkurasi</span></div>
-              <div className="guarantee-item"><Shield size={18} /> <span>Transaksi Aman</span></div>
-              <div className="guarantee-item"><Truck size={18} /> <span>Pengiriman Cepat</span></div>
+              <div className="guarantee-item"><Shield size={18} /> Jaminan Kualitas</div>
+              <div className="guarantee-item"><Truck size={18} /> Pengiriman Aman</div>
+              <div className="guarantee-item"><RotateCcw size={18} /> Pengembalian Mudah</div>
             </div>
           </div>
         </div>
@@ -140,19 +144,22 @@ const ProductDetail = ({ onAddToCart, onToggleFavorite, products }) => {
           <div className="related-products-section">
             <h2>Produk Terkait</h2>
             <div className="products-grid">
-              {relatedProducts.map(relatedProduct => (
-                <ProductCard 
-                  key={relatedProduct._id} 
-                  product={relatedProduct} 
-                  onAddToCart={onAddToCart} 
-                  onToggleFavorite={onToggleFavorite} 
+              {relatedProducts.map(p => (
+                <ProductCard
+                  key={p._id}
+                  product={p}
+                  onAddToCart={onAddToCart}
+                  onToggleFavorite={onToggleFavorite}
+                  showNotification={showNotification}
+                  user={user}
+                  onAuthAction={onAuthAction}
                 />
               ))}
             </div>
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 };
 

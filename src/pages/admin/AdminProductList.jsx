@@ -37,7 +37,6 @@ const AdminProductList = () => {
           throw new Error(data.message || 'Gagal menghapus produk');
         }
 
-        // Refresh daftar produk setelah berhasil menghapus
         fetchProducts();
         alert('Produk berhasil dihapus!');
 

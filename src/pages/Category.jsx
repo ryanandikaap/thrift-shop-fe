@@ -2,10 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shirt, Footprints, Watch, ArrowRight } from 'lucide-react';
 
-// Data kategori sekarang didefinisikan di sini, bukan dari dummyData.js
 const categoryNames = ["Pakaian", "Sepatu", "Aksesoris"];
 
-// Data visual untuk setiap kategori
 const categoryDetails = {
   'Pakaian': {
     itemCount: 120,
@@ -24,8 +22,6 @@ const categoryDetails = {
   }
 };
 
-// Gabungkan data dari dummyData dengan detail visual
-// Filter "Semua" agar tidak ditampilkan di halaman kategori
 const categories = categoryNames
   .filter(name => name !== "Semua")
   .map(name => ({

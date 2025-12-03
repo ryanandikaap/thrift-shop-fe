@@ -6,18 +6,16 @@ const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('authToken');
 
   if (!token) {
-    // Jika tidak ada token, arahkan ke halaman utama
-    return <Navigate to="/" />;
+    return <Navigate to="/admin/login" />;
   }
 
   try {
     const decodedToken = jwtDecode(token);
-    // Cek apakah token masih berlaku dan rolenya adalah admin
     if (decodedToken.exp * 1000 < Date.now() || decodedToken.role !== 'admin') {
-      return <Navigate to="/" />;
+      return <Navigate to="/admin/login" />;
     }
   } catch (error) {
-    return <Navigate to="/" />;
+    return <Navigate to="/admin/login" />;
   }
 
   return children;

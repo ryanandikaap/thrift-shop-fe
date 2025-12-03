@@ -4,8 +4,6 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Di sini Anda bisa menambahkan logika pengiriman form,
-    // misalnya menggunakan emailjs atau service lainnya.
     alert('Terima kasih! Pesan Anda telah terkirim (simulasi).');
     e.target.reset();
   };

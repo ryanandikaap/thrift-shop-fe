@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header'; 
 import Home from './pages/Home';
@@ -61,15 +61,32 @@ function App() {
     const userData = localStorage.getItem('user');
     if (token && userData) {
       try {
-        setUser(JSON.parse(userData));
-        fetchWishlist(token);
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        // Try to fetch wishlist, but don't clear user if fails
+        fetch('http://localhost:5000/api/users/wishlist', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Token tidak valid');
+          }
+          return response.json();
+        })
+        .then(data => {
+          syncWishlistWithProducts(data.wishlist || []);
+        })
+        .catch(error => {
+          console.error("Token tidak valid:", error);
+          // Don't clear user state, just log error
+        });
       } catch (e) {
         console.error("Gagal parse data user:", e);
-        handleLogout(false);
+        // Don't clear user state
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, []);
 
   const syncWishlistWithProducts = (wishlistProductIds) => {
     setProducts(prevProducts =>
@@ -198,15 +215,17 @@ function App() {
     }
   };
 
-  const handleAuthAction = (showNotif = true) => { 
-    if (user) {
+  const handleAuthAction = (showNotif = true, forceOpenModal = false) => {
+    if (forceOpenModal) {
+      setIsAuthModalOpen(true);
+    } else if (!user) {
+      setIsAuthModalOpen(true);
+    } else {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       setUser(null);
       syncWishlistWithProducts([]);
       if (showNotif) showNotification('Anda telah logout.', 'success');
-    } else {
-      setIsAuthModalOpen(true);
     }
   };
   const handleCloseAuthModal = () => {
@@ -227,7 +246,7 @@ function App() {
     localStorage.setItem('user', JSON.stringify(updatedUserData));
   };
 
-  const showNotification = (message, type) => {
+  const showNotification = useCallback((message, type) => {
     const existingNotifications = document.querySelectorAll('.notification');
     existingNotifications.forEach(notification => {
       if (notification.parentNode) {
@@ -249,15 +268,15 @@ function App() {
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       animation: slideInAndOut 3.5s ease-in-out forwards;
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
       if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
       }
     }, 3500);
-  };
+  }, []);
 
   return (
     <Router>
@@ -297,11 +316,12 @@ function App() {
             
           } />
           <Route path="/produk/:id" element={
-            <ProductDetail 
+            <ProductDetail
               products={products}
               onAddToCart={handleAddToCart}
               onToggleFavorite={handleToggleFavorite}
               showNotification={showNotification}
+              user={user}
               onAuthAction={handleAuthAction}
             />
           } />
@@ -347,17 +367,17 @@ function App() {
             }
           />
 
-          <Route  
-            path="/checkout/:id" 
-            element={user ? 
-              <CheckoutPage user={user} showNotification={showNotification} cart={cart} /> : 
+          <Route
+            path="/checkout/:id"
+            element={user ?
+              <CheckoutPage user={user} showNotification={showNotification} cart={cart} onAuthAction={handleAuthAction} /> :
               <Navigate to="/" replace />
-            } 
+            }
           />
           <Route
             path="/checkout/cart"
             element={user ?
-              <CheckoutPage user={user} showNotification={showNotification} cart={cart} /> :
+              <CheckoutPage user={user} showNotification={showNotification} cart={cart} onAuthAction={handleAuthAction} /> :
               <Navigate to="/" replace />
             }
           />

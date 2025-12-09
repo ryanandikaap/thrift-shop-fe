@@ -39,12 +39,28 @@ const ProductDetail = ({ products, onAddToCart, onToggleFavorite, showNotificati
     window.scrollTo(0, 0);
   }, [id, products]);
 
-  const handleBuyNow = () => {
-    if (!user) {
+  const handleBuyNow = async () => {
+    console.log('Status User:', user);
+    const token = localStorage.getItem('authToken');
+    if (!user || !token) {
       onAuthAction();
       return;
     }
-    navigate(`/checkout/${id}`);
+
+    // Validate token before proceeding
+    try {
+      const response = await fetch('http://localhost:5000/api/users/wishlist', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        throw new Error('Token tidak valid');
+      }
+      navigate(`/checkout/${id}`);
+    } catch (error) {
+      console.error("Token tidak valid:", error);
+      onAuthAction(false, true); // Open login modal without logging out
+      showNotification('Sesi login telah berakhir. Silakan login kembali.', 'warning');
+    }
   };
 
   const handleQuantityChange = (amount) => {

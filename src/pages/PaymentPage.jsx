@@ -30,7 +30,18 @@ const PaymentPage = ({ showNotification }) => {
   }, [orderId, showNotification]);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      // Validasi ukuran file (contoh: maks 2MB)
+      const maxSizeInBytes = 2 * 1024 * 1024; 
+      if (selectedFile.size > maxSizeInBytes) {
+        showNotification('Ukuran file terlalu besar. Maksimal 2MB.', 'warning');
+        e.target.value = null; // Reset input file
+        setFile(null);
+        return;
+      }
+    }
+    setFile(selectedFile);
   };
 
   const handleUploadProof = async (e) => {
@@ -52,8 +63,15 @@ const PaymentPage = ({ showNotification }) => {
         body: formData,
       });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Gagal mengunggah bukti');
+      if (!response.ok) {
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Gagal mengunggah bukti pembayaran.');
+        } else {
+          throw new Error('Terjadi kesalahan pada server saat mengunggah bukti. Silakan coba lagi nanti.');
+        }
+      }
 
       showNotification('Bukti pembayaran berhasil diunggah!', 'success');
       navigate('/produk');

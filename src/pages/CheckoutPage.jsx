@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const CheckoutPage = ({ user, showNotification, cart }) => {
+const CheckoutPage = ({ user, showNotification, cart, onAuthAction }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isCartCheckout = id === 'cart';
@@ -55,6 +55,15 @@ const CheckoutPage = ({ user, showNotification, cart }) => {
 
     try {
       const token = localStorage.getItem('authToken');
+
+      // Validate token before creating order
+      const validationResponse = await fetch('http://localhost:5000/api/users/wishlist', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!validationResponse.ok) {
+        throw new Error('Token tidak valid');
+      }
+
       const response = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
         headers: {
@@ -69,9 +78,17 @@ const CheckoutPage = ({ user, showNotification, cart }) => {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Gagal membuat pesanan');
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          // Token invalid, open login modal
+          onAuthAction(false, true);
+          showNotification('Sesi login telah berakhir. Silakan login kembali.', 'warning');
+          return;
+        }
+        throw new Error(data.message || 'Gagal membuat pesanan');
+      }
 
-      navigate(`/payment/${data.orderId}`); 
+      navigate(`/payment/${data.orderId}`);
     } catch (err) {
       showNotification(err.message, 'warning');
     } finally {
@@ -139,4 +156,4 @@ const CheckoutPage = ({ user, showNotification, cart }) => {
   );
 };
 
-export default CheckoutPage;
+export default memo(CheckoutPage);

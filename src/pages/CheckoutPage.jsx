@@ -70,8 +70,13 @@ const CheckoutPage = ({ user, showNotification, cart, onAuthAction }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          items: itemsToCheckout.map(item => ({ product: item._id, quantity: item.quantity, price: item.price })),
+        body: JSON.stringify({          items: itemsToCheckout.map(item => ({
+            product: item._id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+          })),
           totalAmount: totalAmount,
           customerDetails: formData,
         }),

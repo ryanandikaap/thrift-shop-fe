@@ -30,6 +30,21 @@ const OrderHistory = ({ showNotification }) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'Menunggu Pembayaran';
+      case 'paid':
+        return 'Dibayar';
+      case 'shipped':
+        return 'Dikirim';
+      case 'completed':
+        return 'Selesai';
+      default:
+        return status;
+    }
+  };
+
   if (loading) {
     return <div className="loading-state">Memuat riwayat pesanan...</div>;
   }
@@ -57,7 +72,7 @@ const OrderHistory = ({ showNotification }) => {
               <span className="order-date">{new Date(order.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
             </div>
             <div className="order-status-total">
-              <span className={`status-badge status-${order.status.toLowerCase()}`}>{order.status}</span>
+              <span className={`status-badge status-${order.status.toLowerCase()}`}>{getStatusText(order.status)}</span>
               <span className="order-total">Rp{order.totalAmount.toLocaleString('id-ID')}</span>
             </div>
             <button className="expand-btn">
@@ -78,9 +93,9 @@ const OrderHistory = ({ showNotification }) => {
               ))}
               <div className="order-shipping-details">
                 <h4>Detail Pengiriman:</h4>
-                <p><strong>Penerima:</strong> {order.customerDetails.name}</p>
-                <p><strong>Alamat:</strong> {order.customerDetails.address}</p>
-                <p><strong>Telepon:</strong> {order.customerDetails.phone}</p>
+                <p><strong>Penerima:</strong> {order.customerDetails?.name || 'Tidak tersedia'}</p>
+                <p><strong>Alamat:</strong> {order.customerDetails?.address || 'Tidak tersedia'}</p>
+                <p><strong>Telepon:</strong> {order.customerDetails?.phone || 'Tidak tersedia'}</p>
               </div>
             </div>
           )}

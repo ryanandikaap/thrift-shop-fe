@@ -78,7 +78,7 @@ const AdminOrderList = ({ showNotification }) => {
             ) : orders.length > 0 ? orders.map(order => (
               <tr key={order._id}>
                 <td>{order.orderId}</td>
-                <td>{order.customerDetails.name}</td>
+                <td>{order.customerDetails?.name || 'N/A'}</td>
                 <td>{new Date(order.createdAt).toLocaleDateString('id-ID')}</td>
                 <td>Rp{order.totalAmount.toLocaleString('id-ID')}</td>
                 <td>{getStatusComponent(order.status)}</td>

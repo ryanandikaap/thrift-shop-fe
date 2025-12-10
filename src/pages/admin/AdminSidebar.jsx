@@ -31,7 +31,7 @@ const AdminSidebar = () => {
           <Users size={20} />
           <span>Pengguna</span>
         </NavLink>
-        <NavLink to="/admin/orders" className="sidebar-link disabled-link">
+        <NavLink to="/admin/orders" className="sidebar-link">
           <ShoppingCart size={20} />
           <span>Pesanan</span>
         </NavLink>

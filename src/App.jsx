@@ -11,6 +11,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminProductForm from './pages/admin/AdminProductForm'; 
 import AdminLoginPage from './pages/admin/AdminLoginPage'; 
 import AdminDashboard from './pages/admin/AdminDashboard'; 
+import AdminOrderList from './pages/admin/AdminOrderList';
 import AdminUserList from './pages/admin/AdminUserList'; 
 import ProtectedRoute from './components/ProtectedRoute'; 
 import CheckoutPage from './pages/CheckoutPage'; 
@@ -409,6 +410,7 @@ function App() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="products" element={<AdminProductList />} />
             <Route path="users" element={<AdminUserList showNotification={showNotification} />} />
+            <Route path="orders" element={<AdminOrderList showNotification={showNotification} />} />
             <Route path="products/new" element={<AdminProductForm />} />
             <Route path="products/edit/:id" element={<AdminProductForm />} />
           </Route>

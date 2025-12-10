@@ -54,6 +54,13 @@ const AdminDashboard = () => {
           <h3>Total Produk</h3>
           <p className="stat-number">{stats ? stats.totalProducts : '...'}</p>
         </div>
+        <div className="stat-card tertiary">
+          <div className="card-icon">
+            <ShoppingCart size={28} />
+          </div>
+          <h3>Total Pesanan</h3>
+          <p className="stat-number">{stats ? stats.totalOrders : '...'}</p>
+        </div>
         <div className="stat-card accent">
           <div className="card-icon">
             <DollarSign size={28} />

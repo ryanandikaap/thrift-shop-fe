@@ -1,0 +1,177 @@
+Flowchart for Thrift Shop Website - Login Process
+
+This flowchart describes the login process for users (customers and admins).
+
+Start: User clicks login button.
+
+1. Display Login Modal
+   - Show username and password fields.
+
+2. User Enters Credentials
+   - Username and password input.
+
+3. Submit Login
+   - User clicks submit.
+
+4. Validate Input
+   - Check if username and password are provided.
+     - If not: Show error "Please enter username and password."
+       - Return to input.
+
+5. Send Request to Server
+   - POST to /api/auth/login with credentials.
+
+6. Server Validates Credentials
+   - Check if user exists and password matches.
+     - If invalid: Return error "Invalid credentials."
+       - Display error to user.
+       - Return to input.
+
+7. Generate Token
+   - Create JWT token for user.
+
+8. Return Token and User Data
+   - Send token and user info to client.
+
+9. Store Token and User Data
+   - Save to localStorage.
+
+10. Update App State
+    - Set user in state, fetch wishlist if applicable.
+
+11. Close Modal
+    - Hide login modal.
+
+12. Show Success Notification
+    - "Login successful!"
+
+13. Redirect if Admin
+    - If role is 'admin', redirect to /admin/dashboard.
+
+End: User logged in.
+
+ASCII Art Representation:
+
++-------------------+
+|   Start: Click    |
+|   Login Button    |
++-------------------+
+          |
+          v
++-------------------+
+| Display Login     |
+| Modal             |
++-------------------+
+          |
+          v
++-------------------+
+| User Enters       |
+| Credentials       |
++-------------------+
+          |
+          v
++-------------------+
+| Submit Login      |
++-------------------+
+          |
+          v
++-------------------+
+| Validate Input    |
++-------------------+
+     |        |
+     | Invalid| Valid
+     v        v
++-------------------+
+| Show Error:       |
+| "Enter username   |
+| and password"     |
++-------------------+
+          |
+          v
++-------------------+
+| Return to Input   |
++-------------------+
+          |
+          v
++-------------------+
+| Send Request to   |
+| Server            |
++-------------------+
+          |
+          v
++-------------------+
+| Server Validates  |
+| Credentials       |
++-------------------+
+     |        |
+     | Invalid| Valid
+     v        v
++-------------------+
+| Return Error:     |
+| "Invalid creds"   |
++-------------------+
+          |
+          v
++-------------------+
+| Display Error     |
++-------------------+
+          |
+          v
++-------------------+
+| Return to Input   |
++-------------------+
+          |
+          v
++-------------------+
+| Generate Token    |
++-------------------+
+          |
+          v
++-------------------+
+| Return Token &    |
+| User Data         |
++-------------------+
+          |
+          v
++-------------------+
+| Store in          |
+| localStorage      |
++-------------------+
+          |
+          v
++-------------------+
+| Update App State  |
++-------------------+
+          |
+          v
++-------------------+
+| Close Modal       |
++-------------------+
+          |
+          v
++-------------------+
+| Show Success      |
+| Notification      |
++-------------------+
+          |
+          v
++-------------------+
+| Is Admin?         |
++-------------------+
+     |        |
+     | No     | Yes
+     v        v
++-------------------+
+| Stay on Page      |
++-------------------+
+          |
+          v
++-------------------+
+| Redirect to       |
+| /admin/dashboard  |
++-------------------+
+          |
+          v
++-------------------+
+|       End         |
++-------------------+

@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductCard from './ProductCard';
+import '../styles/components/ProductGrid.css';
 
 const ProductGrid = ({ products, onAddToCart, onToggleFavorite }) => {
   if (!products || products.length === 0) {

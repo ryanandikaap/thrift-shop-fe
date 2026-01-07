@@ -1,6 +1,8 @@
 import React from 'react';
 import { Truck, Shield, RotateCcw } from 'lucide-react';
 
+import '../styles/components/Features.css';
+
 const features = [
   { title: 'Pengiriman Cepat & Aman', description: 'Kami memastikan produk sampai ke tangan Anda dengan cepat dan aman.', icon: 'Truck' },
   { title: 'Jaminan Kualitas', description: 'Setiap produk telah melalui proses kurasi dan pengecekan kualitas yang ketat.', icon: 'Shield' },

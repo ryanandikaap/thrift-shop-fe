@@ -1,0 +1,61 @@
+/* ===================================
+   ORDER HISTORY STYLES
+   =================================== */
+
+.order-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-card {
+  border: 1px solid var(--neutral);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.order-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: var(--neutral-light);
+  align-items: center;
+}
+
+.order-info { display: flex; flex-direction: column; gap: 4px; }
+.order-id { font-weight: 700; color: var(--text); }
+.order-date { font-size: 0.9rem; color: var(--text-light); }
+
+.order-status-total { display: flex; align-items: center; gap: 20px; }
+.order-total { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+.expand-btn { background: none; border: none; cursor: pointer; color: var(--text-light); }
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.status-pending { background: rgba(231, 111, 81, 0.15); color: #c75636; }
+.status-paid { background: rgba(74, 156, 125, 0.15); color: var(--success); }
+.status-shipped { background: rgba(74, 108, 111, 0.15); color: var(--secondary); }
+.status-completed { background: rgba(139, 115, 85, 0.15); color: var(--primary); }
+
+.order-details {
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+.order-details h4 { font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--neutral); }
+
+.order-item { display: flex; gap: 16px; align-items: center; margin-bottom: 12px; }
+.order-item img { width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius); }
+.order-item .item-info { display: flex; flex-direction: column; }
+.order-item .item-info a { color: var(--text); font-weight: 600; text-decoration: none; }
+.order-item .item-info a:hover { color: var(--primary); }
+.order-item .item-info span { font-size: 0.9rem; color: var(--text-light); }
+
+.order-shipping-details { margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--neutral); }
+.order-shipping-details p { font-size: 0.95rem; color: var(--text-light); margin-bottom: 4px; }

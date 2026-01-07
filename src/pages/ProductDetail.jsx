@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Star, Minus, Plus, ShoppingCart, ShoppingBag, Heart, ArrowLeft, Shield, Truck, RotateCcw } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
+import '../styles/pages/ProductDetail.css';
 
 const ProductDetail = ({ products, onAddToCart, onToggleFavorite, showNotification, user, onAuthAction }) => {
   const { id } = useParams();

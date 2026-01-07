@@ -1,0 +1,89 @@
+/* ===================================
+   ADMIN TABLE STYLES
+   =================================== */
+
+.admin-table-wrapper {
+  overflow-x: auto;
+  background: var(--white);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th, .admin-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--neutral);
+}
+
+.admin-table th {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: var(--text-light);
+  background: var(--neutral-light);
+}
+
+.admin-table tbody tr:hover {
+  background-color: var(--neutral-light);
+}
+
+.admin-table .action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn, .delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.edit-btn {
+  background: var(--secondary);
+  color: var(--white);
+}
+
+.edit-btn:hover {
+  background: var(--secondary-dark);
+}
+
+.delete-btn {
+  background: var(--warning);
+  color: var(--white);
+}
+
+.delete-btn:hover {
+  background: #c75636;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.role-badge.admin {
+  background-color: rgba(193, 154, 107, 0.15);
+  color: var(--accent-dark);
+}
+
+.role-badge.customer {
+  background-color: var(--neutral);
+  color: var(--text-light);
+}

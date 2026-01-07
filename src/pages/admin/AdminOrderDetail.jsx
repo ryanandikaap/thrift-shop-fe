@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, User, MapPin, Phone, Hash, Calendar, DollarSign, Package, Truck, CheckCircle, Clock } from 'lucide-react';
+import { getStatusComponent as getStatusComponentUtil } from '../../utils/statusUtils.jsx';
+import '../../styles/admin/AdminOrderDetail.css';
 
 const AdminOrderDetail = ({ showNotification }) => {
   const { id } = useParams();
@@ -63,19 +65,22 @@ const AdminOrderDetail = ({ showNotification }) => {
     }
   };
 
-  const getStatusComponent = (status) => {
-    switch (status) {
-      case 'pending':
-        return <span className="status-badge pending"><Clock size={14} /> Menunggu Pembayaran</span>;
-      case 'paid':
-        return <span className="status-badge paid"><CheckCircle size={14} /> Dibayar</span>;
-      case 'shipped':
-        return <span className="status-badge shipped"><Truck size={14} /> Dikirim</span>;
-      case 'completed':
-        return <span className="status-badge completed"><CheckCircle size={14} /> Selesai</span>;
-      default:
-        return <span className="status-badge">{status}</span>;
-    }
+  const getStatusComponent = (status) => { // Wrapper to pass correct icon
+    let Icon;
+    if (status === 'pending') Icon = Clock;
+    else if (status === 'paid' || status === 'completed') Icon = CheckCircle;
+    else if (status === 'shipped') Icon = Truck;
+    else Icon = Package; // Default icon
+    
+    return getStatusComponentUtil(status, Icon);
+  };
+
+  const getStatusText = (status) => { // Helper for select options
+    if (status === 'pending') return 'Menunggu Pembayaran';
+    if (status === 'paid') return 'Dibayar';
+    if (status === 'shipped') return 'Dikirim';
+    if (status === 'completed') return 'Selesai';
+    return status;
   };
 
   if (loading) return <div className="admin-loading">Memuat detail pesanan...</div>;
@@ -138,10 +143,10 @@ const AdminOrderDetail = ({ showNotification }) => {
           <h3>Ubah Status Pesanan</h3>
           <div className="status-update-form">
             <select value={status} onChange={(e) => setStatus(e.target.value)}>
-              <option value="pending">Menunggu Pembayaran</option>
-              <option value="paid">Dibayar</option>
-              <option value="shipped">Dikirim</option>
-              <option value="completed">Selesai</option>
+              <option value="pending">{getStatusText('pending')}</option>
+              <option value="paid">{getStatusText('paid')}</option>
+              <option value="shipped">{getStatusText('shipped')}</option>
+              <option value="completed">{getStatusText('completed')}</option>
             </select>
             <button onClick={handleStatusUpdate} disabled={isUpdating}>
               {isUpdating ? 'Memperbarui...' : 'Perbarui Status'}

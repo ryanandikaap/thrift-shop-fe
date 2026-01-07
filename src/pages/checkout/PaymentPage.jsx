@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { UploadCloud, CheckCircle, Clock } from 'lucide-react';
+import '../../styles/pages/Payment.css';
 
 const PaymentPage = ({ showNotification }) => {
   const { orderId } = useParams();

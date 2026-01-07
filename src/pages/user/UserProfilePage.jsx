@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import OrderHistory from '../components/OrderHistory';
-import ProfileEditor from '../components/ProfileEditor';
+import OrderHistory from '../../components/OrderHistory';
+import ProfileEditor from '../../components/ProfileEditor';
 import { User, ShoppingBag } from 'lucide-react';
+import '../../styles/user/UserProfile.css';
 
 const UserProfilePage = ({ user, onUserUpdate, showNotification }) => {
   const [activeTab, setActiveTab] = useState('orders');

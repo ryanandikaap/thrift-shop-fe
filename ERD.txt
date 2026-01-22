@@ -1,74 +1,74 @@
-Entity-Relationship Diagram (ERD) for Thrift Shop Website
+Diagram Entitas-Hubungan (ERD) untuk Website Thrift Shop
 
-Entities:
+Entitas:
 
 1. User
-   - Attributes:
-     - _id (ObjectId, Primary Key)
-     - username (String, required, unique)
-     - password (String, required)
+   - Atribut:
+     - _id (ObjectId, Kunci Utama)
+     - username (String, wajib, unik)
+     - password (String, wajib)
      - role (String, enum: ['user', 'admin'], default: 'user')
      - resetPasswordToken (String)
      - resetPasswordExpire (Date)
-     - wishlist (Array of ObjectId, references Product)
+     - wishlist (Array of ObjectId, referensi Product)
      - createdAt (Date)
      - updatedAt (Date)
 
 2. Product
-   - Attributes:
-     - _id (ObjectId, Primary Key)
-     - name (String, required)
-     - price (Number, required)
+   - Atribut:
+     - _id (ObjectId, Kunci Utama)
+     - name (String, wajib)
+     - price (Number, wajib)
      - originalPrice (Number)
      - discount (Number)
-     - image (String, required)
+     - image (String, wajib)
      - isNewArrival (Boolean, default: false)
      - rating (Number, default: 0)
      - reviews (Number, default: 0)
-     - description (String, required)
-     - size (String, required)
-     - condition (String, required)
-     - category (String, required)
+     - description (String, wajib)
+     - size (String, wajib)
+     - condition (String, wajib)
+     - category (String, wajib)
      - createdAt (Date)
      - updatedAt (Date)
 
 3. Order
-   - Attributes:
-     - _id (ObjectId, Primary Key)
-     - orderId (String, required, unique)
-     - user (ObjectId, required, references User)
+   - Atribut:
+     - _id (ObjectId, Kunci Utama)
+     - orderId (String, wajib, unik)
+     - user (ObjectId, wajib, referensi User)
      - items (Array of objects):
-       - product (ObjectId, required, references Product)
-       - name (String, required)
-       - quantity (Number, required)
-       - price (Number, required)
-       - image (String, required)
-     - totalAmount (Number, required)
+       - product (ObjectId, wajib, referensi Product)
+       - name (String, wajib)
+       - quantity (Number, wajib)
+       - price (Number, wajib)
+       - image (String, wajib)
+     - totalAmount (Number, wajib)
      - customerDetails (Object):
-       - name (String, required)
-       - phone (String, required)
-       - address (String, required)
+       - name (String, wajib)
+       - phone (String, wajib)
+       - address (String, wajib)
      - status (String, enum: ['pending', 'paid', 'shipped', 'completed'], default: 'pending')
      - paymentProof (String)
      - createdAt (Date)
      - updatedAt (Date)
 
-Relationships:
+Hubungan:
 
-- User to Product (Wishlist): Many-to-Many
-  - A User can have multiple Products in their wishlist.
-  - A Product can be in multiple Users' wishlists.
-  - Implemented via wishlist array in User model.
+- User ke Product (Wishlist): Many-to-Many
+  - Seorang User dapat memiliki banyak Product di wishlist.
+  - Sebuah Product dapat ada di wishlist banyak User.
+  - Diimplementasikan melalui array wishlist di model User.
 
-- User to Order: One-to-Many
-  - A User can place multiple Orders.
-  - An Order belongs to one User.
+- User ke Order: One-to-Many
+  - Seorang User dapat membuat banyak Order.
+  - Sebuah Order milik satu User.
 
-- Order to Product (Items): Many-to-Many
-  - An Order can contain multiple Products (via items array).
-  - A Product can be in multiple Orders.
+- Order ke Product (Items): Many-to-Many
+  - Sebuah Order dapat berisi banyak Product (melalui array items).
+  - Sebuah Product dapat ada di banyak Order.
 
-ASCII Art Representation:
+Representasi ASCII Art:
 
 +----------------+       +----------------+       +----------------+
 |     User       |       |    Product     |       |     Order      |

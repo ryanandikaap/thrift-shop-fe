@@ -1,0 +1,561 @@
+================================================================================
+                    DATA FLOW DIAGRAM (DFD)
+                    SISTEM THRIFT SHOP E-COMMERCE
+================================================================================
+
+================================================================================
+DIAGRAM KONTEKS (DFD LEVEL 0)
+================================================================================
+
+Entitas Eksternal:
+1. Customer/User (Pelanggan)
+2. Admin (Administrator)
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│                         ENTITAS EKSTERNAL                                │
+│                                                                          │
+│  ┌──────────────┐                                  ┌──────────────┐     │
+│  │   CUSTOMER   │                                  │    ADMIN     │     │
+│  │    (USER)    │                                  │              │     │
+│  └──────────────┘                                  └──────────────┘     │
+│         │                                                  │             │
+│         │ Data Registrasi                                 │ Kredensial  │
+│         │ Kredensial Login                                │ Login Admin │
+│         │ Data Produk Request                             │ Data Produk │
+│         │ Data Keranjang                                  │ Update      │
+│         │ Data Checkout                                   │ Status      │
+│         │ Bukti Pembayaran                                │ Pesanan     │
+│         │ Request Wishlist                                │ Request     │
+│         │                                                  │ Dashboard   │
+│         ▼                                                  ▼             │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                                                                  │   │
+│  │                  SISTEM THRIFT SHOP E-COMMERCE                   │   │
+│  │                                                                  │   │
+│  │  • Manajemen Autentikasi & Otorisasi                            │   │
+│  │  • Manajemen Produk (Browse, Search, Detail)                    │   │
+│  │  • Manajemen Keranjang Belanja                                  │   │
+│  │  • Manajemen Wishlist                                           │   │
+│  │  • Manajemen Pesanan & Pembayaran                               │   │
+│  │  • Manajemen Admin (Dashboard, CRUD, Reports)                   │   │
+│  │                                                                  │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│         │                                                  │             │
+│         │ Token Autentikasi                                │ Token Admin │
+│         │ Data Produk                                      │ Dashboard   │
+│         │ Konfirmasi Keranjang                             │ Stats       │
+│         │ Invoice Pesanan                                  │ Data Users  │
+│         │ Status Pembayaran                                │ Data Orders │
+│         │ Data Wishlist                                    │ Konfirmasi  │
+│         │ Notifikasi                                       │ Update      │
+│         ▼                                                  ▼             │
+│  ┌──────────────┐                                  ┌──────────────┐     │
+│  │   CUSTOMER   │                                  │    ADMIN     │     │
+│  │    (USER)    │                                  │              │     │
+│  └──────────────┘                                  └──────────────┘     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+KETERANGAN ALIRAN DATA LEVEL 0:
+
+Dari Customer ke Sistem:
+- Data Registrasi (username, password)
+- Kredensial Login (username, password)
+- Request Data Produk (browse, search, filter)
+- Data Keranjang (add, update, remove items)
+- Data Checkout (items, customer details, total amount)
+- Bukti Pembayaran (upload payment proof)
+- Request Wishlist (add/remove favorite products)
+
+Dari Sistem ke Customer:
+- Token Autentikasi (JWT token)
+- Data Produk (product list, details, images)
+- Konfirmasi Keranjang (cart updates)
+- Invoice Pesanan (order ID, details, status)
+- Status Pembayaran (payment confirmation)
+- Data Wishlist (favorite products)
+- Notifikasi (success/error messages)
+
+Dari Admin ke Sistem:
+- Kredensial Login Admin (username, password)
+- Data Produk (create, update, delete)
+- Update Status Pesanan (pending, paid, shipped, completed)
+- Request Data Users (view, delete)
+- Request Dashboard Stats
+
+Dari Sistem ke Admin:
+- Token Admin (JWT token with admin role)
+- Dashboard Statistics (total users, products, orders)
+- Data Users (user list, details)
+- Data Orders (order list, details, payment proofs)
+- Konfirmasi Update (success/error messages)
+
+
+================================================================================
+DFD LEVEL 1 - DEKOMPOSISI SISTEM UTAMA
+================================================================================
+
+Data Stores (Penyimpanan Data):
+- D1: Users (Data Pengguna)
+- D2: Products (Data Produk)
+- D3: Orders (Data Pesanan)
+- D4: Cart (Keranjang Belanja - Local Storage)
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│                    PROSES 1.0: MANAJEMEN AUTENTIKASI                     │
+│                                                                          │
+│                                                                          │
+│  CUSTOMER ──────> 1.1 Registrasi User                                   │
+│                   │                                                      │
+│  [username,       │ Validasi Input                                      │
+│   password]       │ Check Username Exists                               │
+│                   │ Hash Password (bcrypt)                              │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ◄── [username, hashedPassword, role='user']    │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Success Message]                                   │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── "Registrasi Berhasil"                                 │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 1.2 Login User                                        │
+│                   │                                                      │
+│  [username,       │ Validasi Input                                      │
+│   password]       │ Find User (role != 'admin')                         │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ──> [User Data]                                │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Verify Password (bcrypt.compare)                    │
+│                   │ Generate JWT Token (7 days)                         │
+│                   │                                                      │
+│                   │ [token, user data]                                  │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Token & User Info                                     │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  ADMIN ──────────> 1.3 Login Admin                                      │
+│                   │                                                      │
+│  [username,       │ Validasi Input                                      │
+│   password]       │ Find Admin (role = 'admin')                         │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ──> [Admin Data]                               │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Verify Password (bcrypt.compare)                    │
+│                   │ Generate JWT Token (1 hour)                         │
+│                   │                                                      │
+│                   │ [token, admin data]                                 │
+│                   ▼                                                      │
+│  ADMIN ◄────────── Token & Admin Info                                   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│                    PROSES 2.0: MANAJEMEN PRODUK                          │
+│                                                                          │
+│                                                                          │
+│  CUSTOMER ──────> 2.1 Browse Produk                                     │
+│                   │                                                      │
+│  [GET Request]    │ Query All Products                                  │
+│                   │ Sort by createdAt (desc)                            │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D2:     │ ──> [Array of Products]                        │
+│              │Products │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Format Response (JSON)                              │
+│                   │                                                      │
+│                   │ [Product List]                                      │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Product List (name, price, image, category, etc.)    │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 2.2 Lihat Detail Produk                               │
+│                   │                                                      │
+│  [productId]      │ Validate Product ID                                 │
+│                   │ Find by ID                                          │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D2:     │ ──> [Product Details]                          │
+│              │Products │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Format Response                                     │
+│                   │                                                      │
+│                   │ [Complete Product Info]                             │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Product Details (description, size, condition, etc.) │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  ADMIN ──────────> 2.3 Tambah Produk                                    │
+│                   │                                                      │
+│  [name, price,    │ Validate Auth (JWT)                                 │
+│   image, desc,    │ Validate Input                                      │
+│   size, etc.]     │ Create Product Object                               │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D2:     │ ◄── [Product Data]                             │
+│              │Products │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Saved Product]                                     │
+│                   ▼                                                      │
+│  ADMIN ◄────────── Success Response                                     │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  ADMIN ──────────> 2.4 Update Produk                                    │
+│                   │                                                      │
+│  [productId,      │ Validate Auth (JWT)                                 │
+│   updated data]   │ Find & Update                                       │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D2:     │ ◄── [Updated Data]                             │
+│              │Products │ ──> [Updated Product]                          │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Updated Product]                                   │
+│                   ▼                                                      │
+│  ADMIN ◄────────── Updated Product Data                                 │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  ADMIN ──────────> 2.5 Hapus Produk                                     │
+│                   │                                                      │
+│  [productId]      │ Validate Auth (JWT)                                 │
+│                   │ Find & Delete                                       │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D2:     │ ◄── [Delete productId]                         │
+│              │Products │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Success Message]                                   │
+│                   ▼                                                      │
+│  ADMIN ◄────────── "Produk Berhasil Dihapus"                            │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│                 PROSES 3.0: MANAJEMEN KERANJANG BELANJA                  │
+│                                                                          │
+│                                                                          │
+│  CUSTOMER ──────> 3.1 Tambah ke Keranjang                               │
+│                   │                                                      │
+│  [product,        │ Check User Login                                    │
+│   quantity]       │ Check if Product Exists in Cart                     │
+│                   │ Update/Add to Cart State                            │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D4:     │ ◄── [product, quantity]                        │
+│              │ Cart    │                                                 │
+│              │(Local)  │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Updated Cart]                                      │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Notification "Ditambahkan ke Keranjang"               │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 3.2 Update Quantity                                   │
+│                   │                                                      │
+│  [productId,      │ Validate Quantity (>= 1)                            │
+│   newQuantity]    │ Update Cart State                                   │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D4:     │ ◄── [productId, newQuantity]                   │
+│              │ Cart    │ ──> [Updated Cart]                             │
+│              │(Local)  │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Updated Cart]                                      │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Updated Cart Data                                     │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 3.3 Hapus dari Keranjang                              │
+│                   │                                                      │
+│  [productId]      │ Filter Cart Items                                   │
+│                   │ Remove Item                                         │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D4:     │ ◄── [Remove productId]                         │
+│              │ Cart    │ ──> [Updated Cart]                             │
+│              │(Local)  │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Updated Cart]                                      │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Notification "Item Dihapus"                           │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│                    PROSES 4.0: MANAJEMEN WISHLIST                        │
+│                                                                          │
+│                                                                          │
+│  CUSTOMER ──────> 4.1 Tambah ke Wishlist                                │
+│                   │                                                      │
+│  [productId,      │ Validate Auth (JWT)                                 │
+│   JWT token]      │ Check if Already in Wishlist                        │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ──> [User Wishlist]                            │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Push productId to Wishlist Array                    │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ◄── [userId, productId]                        │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Success Message]                                   │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── "Ditambahkan ke Favorit"                              │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 4.2 Hapus dari Wishlist                               │
+│                   │                                                      │
+│  [productId,      │ Validate Auth (JWT)                                 │
+│   JWT token]      │ Find User                                           │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ──> [User Data]                                │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Pull productId from Wishlist Array                  │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ◄── [Remove productId]                         │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Success Message]                                   │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── "Dihapus dari Favorit"                                │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 4.3 Lihat Wishlist                                    │
+│                   │                                                      │
+│  [JWT token]      │ Validate Auth (JWT)                                 │
+│                   │ Find User & Populate Products                       │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ──> [User with Wishlist]                       │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Populate Product Details                            │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D2:     │ ──> [Product Details]                          │
+│              │Products │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Wishlist Products]                                 │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Wishlist Product List                                 │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│              PROSES 5.0: MANAJEMEN PESANAN & PEMBAYARAN                  │
+│                                                                          │
+│                                                                          │
+│  CUSTOMER ──────> 5.1 Buat Pesanan (Checkout)                           │
+│                   │                                                      │
+│  [items,          │ Validate Auth (JWT)                                 │
+│   totalAmount,    │ Validate Input (items not empty)                    │
+│   customerDetails]│ Generate Order ID (INV-timestamp)                   │
+│                   │ Create Order Object                                 │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D3:     │ ◄── [orderId, user, items, total,              │
+│              │ Orders  │      customerDetails, status='pending']        │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Saved Order]                                       │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Order Details & Invoice                               │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 5.2 Upload Bukti Pembayaran                           │
+│                   │                                                      │
+│  [orderId,        │ Validate Auth (JWT)                                 │
+│   payment proof,  │ Validate File                                       │
+│   JWT token]      │ Find Order by orderId                               │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D3:     │ ──> [Order Data]                               │
+│              │ Orders  │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Upload File to Server (/uploads/proofs/)            │
+│                   │ Update Order (paymentProof, status='paid')          │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D3:     │ ◄── [orderId, proofPath, status='paid']        │
+│              │ Orders  │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Success Message]                                   │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── "Bukti Pembayaran Berhasil Diunggah"                  │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 5.3 Lihat Detail Pesanan                              │
+│                   │                                                      │
+│  [orderId,        │ Validate Auth (JWT)                                 │
+│   JWT token]      │ Find Order by orderId                               │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D3:     │ ──> [Order Data]                               │
+│              │ Orders  │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Check Ownership (user or admin)                     │
+│                   │ Format Response                                     │
+│                   │                                                      │
+│                   │ [Order Details]                                     │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Order Details (items, status, payment proof, etc.)   │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  CUSTOMER ──────> 5.4 Lihat Riwayat Pesanan                             │
+│                   │                                                      │
+│  [JWT token]      │ Validate Auth (JWT)                                 │
+│                   │ Find Orders by userId                               │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D3:     │ ──> [User Orders]                              │
+│              │ Orders  │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Populate Product Details                            │
+│                   │ Sort by createdAt (desc)                            │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D2:     │ ──> [Product Details]                          │
+│              │Products │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Array of Orders]                                   │
+│                   ▼                                                      │
+│  CUSTOMER ◄────── Order History                                         │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│                    PROSES 6.0: MANAJEMEN ADMIN                           │
+│                                                                          │
+│                                                                          │
+│  ADMIN ──────────> 6.1 Lihat Dashboard Statistik                        │
+│                   │                                                      │
+│  [JWT token]      │ Validate Admin Auth (JWT)                           │
+│                   │                                                      │
+│                   ├──> Count Users                                      │
+│                   │    ▼                                                 │
+│                   │ ┌─────────┐                                         │
+│                   │ │ D1:     │ ──> [Total Users]                       │
+│                   │ │ Users   │                                          │
+│                   │ └─────────┘                                         │
+│                   │                                                      │
+│                   ├──> Count Products                                   │
+│                   │    ▼                                                 │
+│                   │ ┌─────────┐                                         │
+│                   │ │ D2:     │ ──> [Total Products]                    │
+│                   │ │Products │                                          │
+│                   │ └─────────┘                                         │
+│                   │                                                      │
+│                   └──> Count Orders                                     │
+│                        ▼                                                 │
+│                     ┌─────────┐                                         │
+│                     │ D3:     │ ──> [Total Orders]                      │
+│                     │ Orders  │                                          │
+│                     └─────────┘                                         │
+│                        │                                                 │
+│                        │ Aggregate Statistics                           │
+│                        │                                                 │
+│                        │ [totalUsers, totalProducts, totalOrders]       │
+│                        ▼                                                 │
+│  ADMIN ◄──────────── Dashboard Statistics                               │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  ADMIN ──────────> 6.2 Lihat Semua User                                 │
+│                   │                                                      │
+│  [JWT token]      │ Validate Admin Auth (JWT)                           │
+│                   │ Find All Users (exclude password)                   │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ──> [Array of Users]                           │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [User List]                                         │
+│                   ▼                                                      │
+│  ADMIN ◄────────── User List (username, role, createdAt, etc.)          │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  ADMIN ──────────> 6.3 Hapus User                                       │
+│                   │                                                      │
+│  [userId,         │ Validate Admin Auth (JWT)                           │
+│   JWT token]      │ Find User by ID                                     │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ──> [User Data]                                │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ Check if not admin                                  │
+│                   │ Delete User                                         │
+│                   ▼                                                      │
+│              ┌─────────┐                                                │
+│              │ D1:     │ ◄── [Delete userId]                            │
+│              │ Users   │                                                 │
+│              └─────────┘                                                │
+│                   │                                                      │
+│                   │ [Success Message]                                   │
+│                   ▼                                                      │
+│  ADMIN ◄────────── "Pengguna Berhasil Dihapus"                          │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  ADMIN ──────────> 6.4 Lihat Semua Pesanan                              │
+│                   │

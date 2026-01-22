@@ -1,132 +1,132 @@
-Use Case Diagram for Thrift Shop Website
+Diagram Kasus Penggunaan untuk Website Thrift Shop
 
-Actors:
-1. Customer (User with role 'user')
-2. Admin (User with role 'admin')
+Aktor:
+1. Pelanggan (User dengan role 'user')
+2. Admin (User dengan role 'admin')
 
-Use Cases for Customer:
-1. Register Account
-   - Description: Customer creates a new account with username and password.
-   - Precondition: Customer is not logged in.
-   - Postcondition: Account created, customer logged in.
+Kasus Penggunaan untuk Pelanggan:
+1. Daftar Akun
+   - Deskripsi: Pelanggan membuat akun baru dengan username dan password.
+   - Prasyarat: Pelanggan belum login.
+   - Pasca kondisi: Akun dibuat, pelanggan login.
 
 2. Login
-   - Description: Customer logs in with username and password.
-   - Precondition: Customer has an account.
-   - Postcondition: Customer is authenticated and logged in.
+   - Deskripsi: Pelanggan login dengan username dan password.
+   - Prasyarat: Pelanggan memiliki akun.
+   - Pasca kondisi: Pelanggan terautentikasi dan login.
 
-3. Browse Products
-   - Description: Customer views list of available products.
-   - Precondition: None.
-   - Postcondition: Products displayed.
+3. Jelajahi Produk
+   - Deskripsi: Pelanggan melihat daftar produk yang tersedia.
+   - Prasyarat: Tidak ada.
+   - Pasca kondisi: Produk ditampilkan.
 
-4. View Product Details
-   - Description: Customer views detailed information of a specific product.
-   - Precondition: Product exists.
-   - Postcondition: Product details shown.
+4. Lihat Detail Produk
+   - Deskripsi: Pelanggan melihat informasi detail produk tertentu.
+   - Prasyarat: Produk ada.
+   - Pasca kondisi: Detail produk ditampilkan.
 
-5. Add to Cart
-   - Description: Customer adds a product to their shopping cart.
-   - Precondition: Customer is logged in, product available.
-   - Postcondition: Product added to cart.
+5. Tambah ke Keranjang
+   - Deskripsi: Pelanggan menambah produk ke keranjang belanja.
+   - Prasyarat: Pelanggan login, produk tersedia.
+   - Pasca kondisi: Produk ditambah ke keranjang.
 
-6. View Cart
-   - Description: Customer views items in their cart.
-   - Precondition: Customer is logged in.
-   - Postcondition: Cart contents displayed.
+6. Lihat Keranjang
+   - Deskripsi: Pelanggan melihat item di keranjang.
+   - Prasyarat: Pelanggan login.
+   - Pasca kondisi: Isi keranjang ditampilkan.
 
-7. Update Cart Quantity
-   - Description: Customer changes quantity of items in cart.
-   - Precondition: Items in cart.
-   - Postcondition: Cart updated.
+7. Update Jumlah Keranjang
+   - Deskripsi: Pelanggan mengubah jumlah item di keranjang.
+   - Prasyarat: Item di keranjang.
+   - Pasca kondisi: Keranjang diupdate.
 
-8. Remove from Cart
-   - Description: Customer removes an item from cart.
-   - Precondition: Item in cart.
-   - Postcondition: Item removed.
+8. Hapus dari Keranjang
+   - Deskripsi: Pelanggan menghapus item dari keranjang.
+   - Prasyarat: Item di keranjang.
+   - Pasca kondisi: Item dihapus.
 
-9. Add to Wishlist
-   - Description: Customer adds a product to their wishlist.
-   - Precondition: Customer logged in, product exists.
-   - Postcondition: Product added to wishlist.
+9. Tambah ke Wishlist
+   - Deskripsi: Pelanggan menambah produk ke wishlist.
+   - Prasyarat: Pelanggan login, produk ada.
+   - Pasca kondisi: Produk ditambah ke wishlist.
 
-10. View Wishlist
-    - Description: Customer views their wishlist.
-    - Precondition: Customer logged in.
-    - Postcondition: Wishlist displayed.
+10. Lihat Wishlist
+    - Deskripsi: Pelanggan melihat wishlist mereka.
+    - Prasyarat: Pelanggan login.
+    - Pasca kondisi: Wishlist ditampilkan.
 
-11. Remove from Wishlist
-    - Description: Customer removes a product from wishlist.
-    - Precondition: Product in wishlist.
-    - Postcondition: Product removed.
+11. Hapus dari Wishlist
+    - Deskripsi: Pelanggan menghapus produk dari wishlist.
+    - Prasyarat: Produk di wishlist.
+    - Pasca kondisi: Produk dihapus.
 
 12. Checkout
-    - Description: Customer initiates checkout process for items in cart.
-    - Precondition: Items in cart, customer logged in.
-    - Postcondition: Order created, redirected to payment.
+    - Deskripsi: Pelanggan memulai proses checkout untuk item di keranjang.
+    - Prasyarat: Item di keranjang, pelanggan login.
+    - Pasca kondisi: Order dibuat, diarahkan ke pembayaran.
 
-13. Make Payment
-    - Description: Customer uploads payment proof for the order.
-    - Precondition: Order pending.
-    - Postcondition: Payment proof uploaded, order status updated.
+13. Lakukan Pembayaran
+    - Deskripsi: Pelanggan upload bukti pembayaran untuk order.
+    - Prasyarat: Order pending.
+    - Pasca kondisi: Bukti pembayaran diupload, status order diupdate.
 
-14. View Order History
-    - Description: Customer views their past orders.
-    - Precondition: Customer logged in.
-    - Postcondition: Orders displayed.
+14. Lihat Riwayat Order
+    - Deskripsi: Pelanggan melihat order sebelumnya.
+    - Prasyarat: Pelanggan login.
+    - Pasca kondisi: Order ditampilkan.
 
-15. View Profile
-    - Description: Customer views their profile information.
-    - Precondition: Customer logged in.
-    - Postcondition: Profile shown.
+15. Lihat Profil
+    - Deskripsi: Pelanggan melihat informasi profil.
+    - Prasyarat: Pelanggan login.
+    - Pasca kondisi: Profil ditampilkan.
 
-16. Edit Profile
-    - Description: Customer updates their profile.
-    - Precondition: Customer logged in.
-    - Postcondition: Profile updated.
+16. Edit Profil
+    - Deskripsi: Pelanggan update profil.
+    - Prasyarat: Pelanggan login.
+    - Pasca kondisi: Profil diupdate.
 
 17. Logout
-    - Description: Customer logs out.
-    - Precondition: Customer logged in.
-    - Postcondition: Session ended.
+    - Deskripsi: Pelanggan logout.
+    - Prasyarat: Pelanggan login.
+    - Pasca kondisi: Sesi berakhir.
 
-Use Cases for Admin:
-1. Login (same as customer, but role 'admin')
+Kasus Penggunaan untuk Admin:
+1. Login (sama dengan pelanggan, tapi role 'admin')
 
-2. View Dashboard
-   - Description: Admin views overview of site statistics.
-   - Precondition: Admin logged in.
-   - Postcondition: Dashboard displayed.
+2. Lihat Dashboard
+   - Deskripsi: Admin melihat overview statistik situs.
+   - Prasyarat: Admin login.
+   - Pasca kondisi: Dashboard ditampilkan.
 
-3. Manage Products
-   - Includes: Create Product, Update Product, Delete Product, View Product List
-   - Description: Admin performs CRUD operations on products.
-   - Precondition: Admin logged in.
-   - Postcondition: Products updated.
+3. Kelola Produk
+   - Termasuk: Buat Produk, Update Produk, Hapus Produk, Lihat Daftar Produk
+   - Deskripsi: Admin melakukan operasi CRUD pada produk.
+   - Prasyarat: Admin login.
+   - Pasca kondisi: Produk diupdate.
 
-4. Manage Orders
-   - Includes: View Order List, View Order Details, Update Order Status
-   - Description: Admin views and updates order statuses.
-   - Precondition: Admin logged in.
-   - Postcondition: Orders managed.
+4. Kelola Order
+   - Termasuk: Lihat Daftar Order, Lihat Detail Order, Update Status Order
+   - Deskripsi: Admin melihat dan update status order.
+   - Prasyarat: Admin login.
+   - Pasca kondisi: Order dikelola.
 
-5. Manage Users
-   - Includes: View User List
-   - Description: Admin views list of users.
-   - Precondition: Admin logged in.
-   - Postcondition: Users displayed.
+5. Kelola User
+   - Termasuk: Lihat Daftar User
+   - Deskripsi: Admin melihat daftar user.
+   - Prasyarat: Admin login.
+   - Pasca kondisi: User ditampilkan.
 
-6. Logout (same as customer)
+6. Logout (sama dengan pelanggan)
 
-ASCII Art Representation:
+Representasi ASCII Art:
 
 +-------------------+     +-------------------+
-|     Customer      |     |       Admin       |
+|    Pelanggan      |     |      Admin        |
 +-------------------+     +-------------------+
           |                       |
           |                       |
     +-----+-----+             +---+---+
-    | Register  |             | Login |
+    |  Daftar   |             | Login |
     +-----------+             +-------+
           |                       |
     +-----+-----+             +---+---+
@@ -134,39 +134,39 @@ ASCII Art Representation:
     +-----------+             +-------+
           |                       |
     +-----+-----+             +---+---+
-    |Browse Prod|             |Manage  |
-    +-----------+             |Products|
+    |Jelajahi Pr|             |Kelola  |
+    +-----------+             |Produk  |
           |                   +-------+
     +-----+-----+             +---+---+
-    |View Detail|             |Manage  |
-    +-----------+             |Orders  |
+    |Lihat Detai|             |Kelola  |
+    +-----------+             |Order   |
           |                   +-------+
     +-----+-----+             +---+---+
-    |Add to Cart|             |Manage  |
-    +-----------+             |Users   |
+    |Tambah ke K|             |Kelola  |
+    +-----------+             |User    |
           |                   +-------+
     +-----+-----+             +---+---+
-    |View Cart  |             | Logout |
+    |Lihat Keran|             | Logout |
     +-----------+             +-------+
           |
     +-----+-----+
-    |Update Cart|
+    |Update Keran|
     +-----------+
           |
     +-----+-----+
-    |Remove Cart|
+    |Hapus Keran|
     +-----------+
           |
     +-----+-----+
-    |Add Wishlist|
+    |Tambah Wish|
     +-----------+
           |
     +-----+-----+
-    |View Wish  |
+    |Lihat Wish |
     +-----------+
           |
     +-----+-----+
-    |Remove Wish|
+    |Hapus Wish |
     +-----------+
           |
     +-----+-----+
@@ -174,19 +174,19 @@ ASCII Art Representation:
     +-----------+
           |
     +-----+-----+
-    |Make Paymnt|
+    |Lakukan Bay|
     +-----------+
           |
     +-----+-----+
-    |View Orders|
+    |Lihat Order|
     +-----------+
           |
     +-----+-----+
-    |View Profile|
+    |Lihat Profi|
     +-----------+
           |
     +-----+-----+
-    |Edit Profile|
+    |Edit Profil|
     +-----------+
           |
     +-----+-----+

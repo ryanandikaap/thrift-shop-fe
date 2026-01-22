@@ -67,8 +67,12 @@ const AdminDashboard = () => {
             <DollarSign size={28} />
           </div>
           <h3>Pendapatan (Bulan Ini)</h3>
-          <p className="stat-number">Rp 0</p>
-          <span className="card-footer">Fitur mendatang</span>
+          <p className="stat-number">
+            {stats ? `Rp${stats.monthlyRevenue.toLocaleString('id-ID')}` : '...'}
+          </p>
+          <span className="card-footer">
+            {stats ? `${stats.monthlyOrdersCount} pesanan` : 'Memuat...'}
+          </span>
         </div>
       </div>
     </div>

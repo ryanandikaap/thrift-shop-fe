@@ -13,7 +13,9 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboard from './pages/admin/AdminDashboard'; 
 import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminOrderList from './pages/admin/AdminOrderList';
-import AdminUserList from './pages/admin/AdminUserList'; 
+import AdminUserList from './pages/admin/AdminUserList';
+import AdminMessageList from './pages/admin/AdminMessageList';
+import AdminMessageDetail from './pages/admin/AdminMessageDetail';
 import ProtectedRoute from './components/ProtectedRoute'; 
 import CheckoutPage from './pages/checkout/CheckoutPage'; 
 import PaymentPage from './pages/checkout/PaymentPage'; 
@@ -281,6 +283,8 @@ function App() {
             <Route path="users" element={<AdminUserList showNotification={showNotification} />} />
             <Route path="orders" element={<AdminOrderList showNotification={showNotification} />} />
             <Route path="orders/:id" element={<AdminOrderDetail showNotification={showNotification} />} />
+            <Route path="messages" element={<AdminMessageList showNotification={showNotification} />} />
+            <Route path="messages/:id" element={<AdminMessageDetail showNotification={showNotification} />} />
             <Route path="products/new" element={<AdminProductForm />} />
             <Route path="products/edit/:id" element={<AdminProductForm />} />
           </Route>

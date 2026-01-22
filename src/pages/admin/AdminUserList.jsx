@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, User, Trash2 } from 'lucide-react';
+import '../../styles/admin/AdminTable.css';
 
 const AdminUserList = ({ showNotification }) => {
   const [users, setUsers] = useState([]);

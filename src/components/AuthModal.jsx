@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import AuthForm from './AuthForm';
+import '../styles/components/AuthModal.css';
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
   const [isLogin, setIsLogin] = useState(true);

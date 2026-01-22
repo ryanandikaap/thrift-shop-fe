@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import '../styles/components/Footer.css';
 
 const Footer = () => {
   return (

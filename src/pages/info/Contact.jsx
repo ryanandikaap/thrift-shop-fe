@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import '../../styles/pages/Contact.css';
 
 const Contact = () => {
   const handleSubmit = (e) => {

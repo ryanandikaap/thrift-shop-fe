@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/components/CategoryFilter.css';
 
 const categories = ["Semua", "Pakaian", "Sepatu", "Aksesoris"];
 

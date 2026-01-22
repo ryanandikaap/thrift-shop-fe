@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { User, Lock, Loader2 } from 'lucide-react';
+import { User, Lock, Loader2, Mail } from 'lucide-react';
 
 const AuthForm = ({ isLogin, onSubmit, showNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -12,9 +13,13 @@ const AuthForm = ({ isLogin, onSubmit, showNotification }) => {
       showNotification('Username dan password tidak boleh kosong', 'warning');
       return;
     }
+    if (!isLogin && !email) {
+      showNotification('Email tidak boleh kosong', 'warning');
+      return;
+    }
     setIsLoading(true);
     try {
-      await onSubmit({ username, password });
+      await onSubmit({ username, password, email });
     } catch (error) { 
     } finally {
       setIsLoading(false);
@@ -37,6 +42,22 @@ const AuthForm = ({ isLogin, onSubmit, showNotification }) => {
           />
         </div>
       </div>
+      {!isLogin && (
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <div className="input-wrapper">
+            <Mail size={20} />
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Masukkan email Anda"
+              disabled={isLoading}
+            />
+          </div>
+        </div>
+      )}
       <div className="form-group">
         <label htmlFor="password">Password</label>
         <div className="input-wrapper">

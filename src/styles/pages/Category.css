@@ -1,0 +1,97 @@
+/* ===================================
+   CATEGORY PAGE STYLES
+   =================================== */
+
+.category-main {
+    padding: 80px 0;
+    background: var(--neutral-light);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.category-card.image-card {
+    position: relative;
+    height: 250px; 
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    text-decoration: none;
+    display: flex; 
+    align-items: flex-end;
+    justify-content: flex-start;
+    border: none;
+    transform: scale(1.0);
+    background-repeat: no-repeat;
+}
+
+.category-card.image-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    transform: scale(1.01); 
+}
+
+.card-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    color: var(--white);
+    transition: background 0.3s ease;
+}
+
+.category-card.image-card:hover .card-overlay {
+    background: linear-gradient(to top, rgba(139, 115, 85, 0.9) 0%, rgba(139, 115, 85, 0.6) 50%, transparent 100%);
+}
+
+.category-icon-wrapper {
+    background: rgba(255, 255, 255, 0.15); 
+    backdrop-filter: blur(5px);
+    color: var(--white);
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+}
+.category-icon-wrapper svg {
+    stroke-width: 2;
+    width: 36px;
+    height: 36px;
+}
+
+.category-card h3 {
+    font-size: 1.5rem;
+    color: var(--white);
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.category-card p {
+    color: var(--white);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.95rem;
+}
+
+.category-card p svg {
+    transition: margin-left 0.3s ease;
+}
+
+.category-card:hover p svg {
+    margin-left: 5px;
+}

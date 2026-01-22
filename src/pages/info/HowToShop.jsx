@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, MousePointerClick, ShoppingCart, Truck } from 'lucide-react';
+import '../../styles/pages/InfoPages.css';
 
 const HowToShop = () => {
   return (

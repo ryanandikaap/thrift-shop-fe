@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star, Heart, ShoppingCart, ShoppingBag } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import '../styles/components/ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart, onToggleFavorite, showNotification, user, onAuthAction }) => {
   const {

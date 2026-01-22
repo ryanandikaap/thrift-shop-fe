@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shirt, Footprints, Watch, ArrowRight } from 'lucide-react';
+import '../../styles/pages/Category.css';
 
 const categoryNames = ["Pakaian", "Sepatu", "Aksesoris"];
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import '../../styles/pages/Checkout.css';
 
 const CheckoutPage = ({ user, showNotification, cart, onAuthAction }) => {
   const { id } = useParams();

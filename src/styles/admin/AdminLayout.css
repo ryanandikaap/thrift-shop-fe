@@ -1,0 +1,116 @@
+/* ===================================
+   ADMIN LAYOUT STYLES
+   =================================== */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--neutral-light);
+}
+
+.admin-sidebar {
+  width: 260px;
+  background: var(--white);
+  border-right: 1px solid var(--neutral);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 10px 0 30px 10px;
+  border-bottom: 1px solid var(--neutral);
+  margin-bottom: 20px;
+}
+
+.sidebar-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.sidebar-header span {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text-light);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.sidebar-link:hover {
+  background-color: var(--neutral-light);
+  color: var(--primary);
+}
+
+.sidebar-link.active {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(139, 115, 85, 0.2);
+}
+
+.sidebar-link.disabled-link {
+  color: var(--neutral-dark);
+  cursor: not-allowed;
+  position: relative;
+}
+
+.sidebar-link.disabled-link::after {
+  content: 'Segera';
+  position: absolute;
+  right: 16px;
+  font-size: 0.7rem;
+  background: var(--secondary);
+  color: var(--white);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+.admin-main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.admin-dashboard-link {
+  background: var(--neutral-light);
+  color: var(--primary) !important;
+  padding: 8px 16px !important;
+  border-radius: var(--radius-full);
+  font-weight: 600 !important;
+}
+
+.admin-dashboard-link::after {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+  }
+  .sidebar-header { display: none; }
+  .sidebar-nav { flex-direction: row; }
+  .admin-main-content { padding: 20px; }
+}

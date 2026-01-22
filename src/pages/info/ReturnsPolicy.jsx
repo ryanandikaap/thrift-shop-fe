@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/pages/InfoPages.css';
 
 const ReturnsPolicy = () => {
   return (

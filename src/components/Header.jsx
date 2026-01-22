@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { ShoppingCart, Search, Menu, X, User, Briefcase, Heart, LogOut, UserCircle } from 'lucide-react';
+import '../styles/components/Header.css';
 
 const Header = ({
   cart,

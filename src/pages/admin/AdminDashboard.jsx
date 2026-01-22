@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Package, DollarSign, ShoppingCart } from 'lucide-react';
+import '../../styles/admin/AdminDashboard.css';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);

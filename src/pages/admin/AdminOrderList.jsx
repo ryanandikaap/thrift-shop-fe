@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, CheckCircle, Truck, Clock } from 'lucide-react';
+import { getStatusComponent as getStatusComponentUtil } from '../../utils/statusUtils.jsx';
+import '../../styles/admin/AdminTable.css';
 
 const AdminOrderList = ({ showNotification }) => {
   const [orders, setOrders] = useState([]);
@@ -36,19 +38,14 @@ const AdminOrderList = ({ showNotification }) => {
     fetchOrders();
   }, [showNotification]);
 
-  const getStatusComponent = (status) => {
-    switch (status) {
-      case 'pending':
-        return <span className="status-badge pending"><Clock size={14} /> Menunggu Pembayaran</span>;
-      case 'paid':
-        return <span className="status-badge paid"><CheckCircle size={14} /> Dibayar</span>;
-      case 'shipped':
-        return <span className="status-badge shipped"><Truck size={14} /> Dikirim</span>;
-      case 'completed':
-        return <span className="status-badge completed"><CheckCircle size={14} /> Selesai</span>;
-      default:
-        return <span className="status-badge">{status}</span>;
-    }
+  const getStatusComponent = (status) => { // Wrapper to pass correct icon
+    let Icon;
+    if (status === 'pending') Icon = Clock;
+    else if (status === 'paid' || status === 'completed') Icon = CheckCircle;
+    else if (status === 'shipped') Icon = Truck;
+    else Icon = Package; // Default icon
+
+    return getStatusComponentUtil(status, Icon);
   };
 
   return (

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Package } from 'lucide-react';
+import { getStatusText } from '../utils/statusUtils.jsx';
+import '../styles/user/OrderHistory.css';
 
 const OrderHistory = ({ showNotification }) => {
   const [orders, setOrders] = useState([]);
@@ -28,21 +30,6 @@ const OrderHistory = ({ showNotification }) => {
 
   const toggleOrderDetails = (orderId) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'Menunggu Pembayaran';
-      case 'paid':
-        return 'Dibayar';
-      case 'shipped':
-        return 'Dikirim';
-      case 'completed':
-        return 'Selesai';
-      default:
-        return status;
-    }
   };
 
   if (loading) {

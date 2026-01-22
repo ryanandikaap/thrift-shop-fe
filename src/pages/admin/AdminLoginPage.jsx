@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../../components/AuthForm';
 import { Briefcase } from 'lucide-react';
+import '../../styles/admin/AdminLogin.css';
 
 const AdminLoginPage = ({ onLoginSuccess, showNotification }) => {
   const navigate = useNavigate();

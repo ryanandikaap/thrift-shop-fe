@@ -1,0 +1,109 @@
+/* ===================================
+   ADMIN FORMS STYLES
+   =================================== */
+
+.admin-form {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--white);
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-form label {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--neutral);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus,
+.admin-form select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+}
+
+.admin-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.admin-form .cta-btn {
+  margin-top: 20px;
+}
+
+.admin-error {
+  background: rgba(231, 111, 81, 0.1);
+  color: var(--warning);
+  padding: 15px;
+  border-radius: var(--radius);
+  border: 1px solid var(--warning);
+  margin-bottom: 20px;
+}
+
+.image-upload-wrapper {
+  margin-top: 8px;
+}
+
+.image-upload-wrapper input[type="file"] {
+  display: none;
+}
+
+.image-upload-label {
+  border: 2px dashed var(--neutral-dark);
+  border-radius: var(--radius);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  color: var(--text-light);
+}
+
+.image-upload-label:hover {
+  border-color: var(--primary);
+  background-color: var(--neutral-light);
+  color: var(--primary);
+}
+
+.image-upload-label svg {
+  margin-bottom: 12px;
+}
+
+.image-preview {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 200px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 4px solid var(--white);
+}

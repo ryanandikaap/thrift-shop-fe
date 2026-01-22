@@ -1,0 +1,34 @@
+/* ===================================
+   PROFILE EDITOR STYLES
+   =================================== */
+
+.profile-editor-form {
+  max-width: 500px;
+}
+.profile-editor-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.profile-editor-form label {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.profile-editor-form input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--neutral);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+.profile-editor-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+}
+.profile-editor-form .cta-btn {
+  width: 100%;
+  margin-top: 10px;
+}

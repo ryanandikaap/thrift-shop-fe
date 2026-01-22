@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2 } from 'lucide-react';
+import '../../styles/admin/AdminTable.css';
 
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);

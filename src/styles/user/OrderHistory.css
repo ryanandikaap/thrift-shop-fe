@@ -59,3 +59,60 @@
 
 .order-shipping-details { margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--neutral); }
 .order-shipping-details p { font-size: 0.95rem; color: var(--text-light); margin-bottom: 4px; }
+
+.order-journey-details {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--neutral);
+}
+
+.journey-empty {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.journey-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.journey-entry {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.journey-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.journey-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.journey-status {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.journey-note {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-light);
+}
+
+.journey-time {
+  font-size: 0.8rem;
+  color: var(--text-lighter);
+}

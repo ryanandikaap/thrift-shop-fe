@@ -1,16 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, User, MapPin, Phone, Hash, Calendar, DollarSign, Package, Truck, CheckCircle, Clock } from 'lucide-react';
+import { ArrowLeft, User, MapPin, Phone, Hash, Calendar, DollarSign, Package, Truck, CheckCircle, Clock, Route } from 'lucide-react';
 import { getStatusComponent as getStatusComponentUtil } from '../../utils/statusUtils.jsx';
 import '../../styles/admin/AdminOrderDetail.css';
 
 const AdminOrderDetail = ({ showNotification }) => {
+  const journeyOptions = [
+    { value: 'order_created', label: 'Pesanan dibuat' },
+    { value: 'payment_uploaded', label: 'Bukti pembayaran diunggah' },
+    { value: 'payment_confirmed', label: 'Pembayaran dikonfirmasi' },
+    { value: 'processing', label: 'Pesanan diproses' },
+    { value: 'packed', label: 'Pesanan dikemas' },
+    { value: 'shipped', label: 'Pesanan dikirim' },
+    { value: 'in_transit', label: 'Dalam perjalanan' },
+    { value: 'out_for_delivery', label: 'Kurir menuju alamat' },
+    { value: 'delivered', label: 'Pesanan diterima' },
+  ];
+
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [status, setStatus] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [journeyStatus, setJourneyStatus] = useState(journeyOptions[0].value);
+  const [journeyNote, setJourneyNote] = useState('');
+  const [isJourneyUpdating, setIsJourneyUpdating] = useState(false);
 
   const fetchOrder = useCallback(async () => {
     setLoading(true);
@@ -26,6 +41,12 @@ const AdminOrderDetail = ({ showNotification }) => {
       const data = await response.json();
       setOrder(data.order);
       setStatus(data.order.status);
+      if (data.order.journey && data.order.journey.length > 0) {
+        const lastJourney = data.order.journey[data.order.journey.length - 1];
+        if (lastJourney?.status && journeyOptions.some(option => option.value === lastJourney.status)) {
+          setJourneyStatus(lastJourney.status);
+        }
+      }
     } catch (err) {
       setError(err.message);
       showNotification(err.message, 'warning');
@@ -65,6 +86,36 @@ const AdminOrderDetail = ({ showNotification }) => {
     }
   };
 
+  const handleJourneyUpdate = async () => {
+    setIsJourneyUpdating(true);
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:5000/api/admin/orders/${id}/journey`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          status: journeyStatus,
+          note: journeyNote,
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Gagal memperbarui proses perjalanan');
+      }
+      setOrder(data.order);
+      setJourneyNote('');
+      showNotification('Proses perjalanan berhasil diperbarui!', 'success');
+    } catch (err) {
+      setError(err.message);
+      showNotification(err.message, 'warning');
+    } finally {
+      setIsJourneyUpdating(false);
+    }
+  };
+
   const getStatusComponent = (status) => { // Wrapper to pass correct icon
     let Icon;
     if (status === 'pending') Icon = Clock;
@@ -82,6 +133,15 @@ const AdminOrderDetail = ({ showNotification }) => {
     if (status === 'completed') return 'Selesai';
     return status;
   };
+
+  const getJourneyLabel = (status) => {
+    const option = journeyOptions.find((item) => item.value === status);
+    return option ? option.label : status;
+  };
+
+  const sortedJourney = (order?.journey || [])
+    .slice()
+    .sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
 
   if (loading) return <div className="admin-loading">Memuat detail pesanan...</div>;
   if (error) return <div className="admin-error">Error: {error}</div>;
@@ -150,6 +210,46 @@ const AdminOrderDetail = ({ showNotification }) => {
             </select>
             <button onClick={handleStatusUpdate} disabled={isUpdating}>
               {isUpdating ? 'Memperbarui...' : 'Perbarui Status'}
+            </button>
+          </div>
+        </div>
+
+        <div className="detail-card journey-card">
+          <h3>Proses Perjalanan</h3>
+          <div className="journey-list">
+            {sortedJourney.length === 0 ? (
+              <div className="journey-empty">Belum ada update perjalanan.</div>
+            ) : (
+              sortedJourney.map((entry, index) => (
+                <div key={`${entry.status}-${entry.updatedAt}-${index}`} className="journey-item">
+                  <div className="journey-icon">
+                    <Route size={16} />
+                  </div>
+                  <div className="journey-content">
+                    <p className="journey-status">{getJourneyLabel(entry.status)}</p>
+                    {entry.note && <p className="journey-note">{entry.note}</p>}
+                    <span className="journey-time">
+                      {new Date(entry.updatedAt).toLocaleString('id-ID')}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="journey-update-form">
+            <select value={journeyStatus} onChange={(e) => setJourneyStatus(e.target.value)}>
+              {journeyOptions.map(option => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+            <textarea
+              rows="3"
+              placeholder="Catatan tambahan (opsional)"
+              value={journeyNote}
+              onChange={(e) => setJourneyNote(e.target.value)}
+            />
+            <button onClick={handleJourneyUpdate} disabled={isJourneyUpdating}>
+              {isJourneyUpdating ? 'Memperbarui...' : 'Tambah Update'}
             </button>
           </div>
         </div>

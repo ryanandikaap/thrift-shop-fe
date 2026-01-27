@@ -5,6 +5,18 @@ import { getStatusText } from '../utils/statusUtils.jsx';
 import '../styles/user/OrderHistory.css';
 
 const OrderHistory = ({ showNotification }) => {
+  const journeyLabels = {
+    order_created: 'Pesanan dibuat',
+    payment_uploaded: 'Bukti pembayaran diunggah',
+    payment_confirmed: 'Pembayaran dikonfirmasi',
+    processing: 'Pesanan diproses',
+    packed: 'Pesanan dikemas',
+    shipped: 'Pesanan dikirim',
+    in_transit: 'Dalam perjalanan',
+    out_for_delivery: 'Kurir menuju alamat',
+    delivered: 'Pesanan diterima',
+  };
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
@@ -31,6 +43,8 @@ const OrderHistory = ({ showNotification }) => {
   const toggleOrderDetails = (orderId) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
+
+  const getJourneyLabel = (status) => journeyLabels[status] || status;
 
   if (loading) {
     return <div className="loading-state">Memuat riwayat pesanan...</div>;
@@ -83,6 +97,28 @@ const OrderHistory = ({ showNotification }) => {
                 <p><strong>Penerima:</strong> {order.customerDetails?.name || 'Tidak tersedia'}</p>
                 <p><strong>Alamat:</strong> {order.customerDetails?.address || 'Tidak tersedia'}</p>
                 <p><strong>Telepon:</strong> {order.customerDetails?.phone || 'Tidak tersedia'}</p>
+              </div>
+              <div className="order-journey-details">
+                <h4>Proses Perjalanan:</h4>
+                {(order.journey || []).length === 0 ? (
+                  <p className="journey-empty">Belum ada update perjalanan.</p>
+                ) : (
+                  <div className="journey-timeline">
+                    {(order.journey || [])
+                      .slice()
+                      .sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt))
+                      .map((entry, index) => (
+                        <div key={`${entry.status}-${entry.updatedAt}-${index}`} className="journey-entry">
+                          <div className="journey-dot" />
+                          <div className="journey-info">
+                            <p className="journey-status">{getJourneyLabel(entry.status)}</p>
+                            {entry.note && <p className="journey-note">{entry.note}</p>}
+                            <span className="journey-time">{new Date(entry.updatedAt).toLocaleString('id-ID')}</span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
               </div>
             </div>
           )}

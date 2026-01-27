@@ -192,17 +192,123 @@
   cursor: not-allowed;
 }
 
+/* Journey Card */
+.journey-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.journey-empty {
+  padding: 12px;
+  background: var(--neutral-light);
+  border-radius: 8px;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.journey-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--neutral-light);
+  background: #fdfdfc;
+}
+
+.journey-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(139, 115, 85, 0.15);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.journey-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.journey-status {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.journey-note {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 0.92rem;
+}
+
+.journey-time {
+  font-size: 0.8rem;
+  color: var(--text-lighter);
+}
+
+.journey-update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.journey-update-form select,
+.journey-update-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--neutral);
+  border-radius: 8px;
+  background-color: #f9fafb;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.journey-update-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.journey-update-form button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--secondary);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.journey-update-form button:hover {
+  background-color: var(--secondary-dark);
+}
+
+.journey-update-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 /* Responsive Grid Layout */
 @media (min-width: 1200px) {
   .detail-grid {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-areas:
-      "items info"
-      "items customer"
-      "items status";
+      "items items items"
+      "info customer status"
+      "journey journey journey";
+    align-items: start;
   }
   .items-card { grid-area: items; }
   .info-card { grid-area: info; }
   .customer-card { grid-area: customer; }
   .status-card { grid-area: status; }
+  .journey-card { grid-area: journey; }
 }

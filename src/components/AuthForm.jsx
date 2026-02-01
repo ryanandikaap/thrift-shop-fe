@@ -10,7 +10,8 @@ const AuthForm = ({ isLogin, onSubmit, showNotification }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || !password) {
-      showNotification('Username dan password tidak boleh kosong', 'warning');
+      const label = isLogin ? 'Username/Email' : 'Username';
+      showNotification(`${label} dan password tidak boleh kosong`, 'warning');
       return;
     }
     if (!isLogin && !email) {
@@ -29,7 +30,7 @@ const AuthForm = ({ isLogin, onSubmit, showNotification }) => {
   return (
     <form onSubmit={handleSubmit} className="auth-form">
       <div className="form-group">
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username">{isLogin ? 'Username atau Email' : 'Username'}</label>
         <div className="input-wrapper">
           <User size={20} />
           <input
@@ -37,7 +38,7 @@ const AuthForm = ({ isLogin, onSubmit, showNotification }) => {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Masukkan username Anda"
+            placeholder={isLogin ? 'Masukkan username atau email' : 'Masukkan username Anda'}
             disabled={isLoading}
           />
         </div>

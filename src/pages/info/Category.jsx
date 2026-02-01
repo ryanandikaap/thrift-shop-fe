@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Shirt, Footprints, Watch, ArrowRight } from 'lucide-react';
 import '../../styles/pages/Category.css';
@@ -7,33 +7,39 @@ const categoryNames = ["Pakaian", "Sepatu", "Aksesoris"];
 
 const categoryDetails = {
   'Pakaian': {
-    itemCount: 120,
     icon: <Shirt size={36} />,
     image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=870&q=80',
   },
   'Sepatu': {
-    itemCount: 75,
     icon: <Footprints size={36} />,
     image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=870&q=80',
   },
   'Aksesoris': {
-    itemCount: 90,
     icon: <Watch size={36} />,
     image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-4.0.3&auto=format&fit=crop&w=870&q=80',
   }
 };
 
-const categories = categoryNames
-  .filter(name => name !== "Semua")
-  .map(name => ({
+const Category = ({ products = [] }) => {
+  const categoryCounts = useMemo(() => {
+    return products.reduce((acc, product) => {
+      if (!product?.category) {
+        return acc;
+      }
+      const key = product.category.toLowerCase();
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+  }, [products]);
+
+  const categories = categoryNames.map(name => ({
     name: name,
-    itemCount: categoryDetails[name]?.itemCount || 0,
+    itemCount: categoryCounts[name.toLowerCase()] || 0,
     icon: categoryDetails[name]?.icon || <Shirt size={36} />,
     image: categoryDetails[name]?.image || '',
     path: `/produk?kategori=${name.toLowerCase()}`
   }));
 
-const Category = () => {
   return (
     <main className="category-main">
       <div className="container">

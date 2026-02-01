@@ -180,6 +180,8 @@ function App() {
               onToggleFavorite={handleToggleFavorite}
               showNotification={showNotification}
               user={user}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
               onAuthAction={handleAuthAction}
             />
           } />
@@ -190,6 +192,7 @@ function App() {
               onToggleFavorite={handleToggleFavorite}
               showNotification={showNotification}
               user={user}
+              searchQuery={searchQuery}
               onAuthAction={handleAuthAction}
             />
             
@@ -204,7 +207,7 @@ function App() {
               onAuthAction={handleAuthAction}
             />
           } />
-          <Route path="/kategori" element={<Category />} />
+          <Route path="/kategori" element={<Category products={products} />} />
           <Route path="/tentang-kami" element={<AboutUs />} />
           <Route path="/kontak" element={<Contact />} />
 

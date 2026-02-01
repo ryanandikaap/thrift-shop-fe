@@ -3,11 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard'; // Pastikan path ini benar
 import { Filter, XCircle } from 'lucide-react';
 import '../styles/pages/Products.css';
-const Products = ({ products, onAddToCart, onToggleFavorite, showNotification, user }) => {
+const Products = ({ products, onAddToCart, onToggleFavorite, showNotification, user, searchQuery }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [filteredProducts, setFilteredProducts] = useState(products);
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
   const [sortOption, setSortOption] = useState('');
 
@@ -33,8 +32,8 @@ const Products = ({ products, onAddToCart, onToggleFavorite, showNotification, u
     if (searchQuery) {
       const lowerCaseSearchQuery = searchQuery.toLowerCase();
       tempProducts = tempProducts.filter(product =>
-        product.name.toLowerCase().includes(lowerCaseSearchQuery) ||
-        product.description.toLowerCase().includes(lowerCaseSearchQuery)
+        (product.name || '').toLowerCase().includes(lowerCaseSearchQuery) ||
+        (product.description || '').toLowerCase().includes(lowerCaseSearchQuery)
       );
     }
 

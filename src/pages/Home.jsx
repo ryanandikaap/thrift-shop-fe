@@ -5,15 +5,15 @@ import CategoryFilter from '../components/CategoryFilter';
 import ProductGrid from '../components/ProductGrid';
 import '../App.css';
 
-const Home = ({ products, onAddToCart, onToggleFavorite, showNotification, user }) => {
+const Home = ({ products, onAddToCart, onToggleFavorite, showNotification, user, searchQuery, setSearchQuery }) => {
   const [selectedCategory, setSelectedCategory] = useState("Semua");
-  const [searchQuery, setSearchQuery] = useState("");
+  const normalizedQuery = (searchQuery || '').toLowerCase();
 
   const filteredProducts = products
     .filter(product => {
       const matchesCategory = selectedCategory === "Semua" || product.category === selectedCategory;
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         product.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = (product.name || '').toLowerCase().includes(normalizedQuery) || 
+                         (product.description || '').toLowerCase().includes(normalizedQuery);
       return matchesCategory && matchesSearch;
     }) 
     .slice(0, 8);

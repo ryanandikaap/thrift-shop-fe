@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Star, Minus, Plus, ShoppingCart, ShoppingBag, Heart, ArrowLeft, Shield, Truck, RotateCcw } from 'lucide-react';
+import { Star, ShoppingCart, ShoppingBag, Heart, ArrowLeft, Shield, Truck, RotateCcw } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import '../styles/pages/ProductDetail.css';
 
@@ -9,7 +9,6 @@ const ProductDetail = ({ products, onAddToCart, onToggleFavorite, showNotificati
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -64,13 +63,9 @@ const ProductDetail = ({ products, onAddToCart, onToggleFavorite, showNotificati
     }
   };
 
-  const handleQuantityChange = (amount) => {
-    setQuantity(prev => Math.max(1, prev + amount));
-  };
-
-  const handleAddToCartWithQuantity = () => {
-    onAddToCart({ ...product, quantity });
-    showNotification(`${product.name} (x${quantity}) ditambahkan ke keranjang.`, 'success');
+  const handleAddToCart = () => {
+    onAddToCart({ ...product, quantity: 1 });
+    showNotification(`${product.name} (x1) ditambahkan ke keranjang.`, 'success');
   };
 
   const handleFavoriteClick = () => {
@@ -136,12 +131,7 @@ const ProductDetail = ({ products, onAddToCart, onToggleFavorite, showNotificati
             </div>
 
             <div className="actions-section">
-              <div className="quantity-selector">
-                <button onClick={() => handleQuantityChange(-1)}><Minus size={18} /></button>
-                <span>{quantity}</span>
-                <button onClick={() => handleQuantityChange(1)}><Plus size={18} /></button>
-              </div>
-              <button className="add-to-cart-btn-detail" onClick={handleAddToCartWithQuantity}>
+              <button className="add-to-cart-btn-detail" onClick={handleAddToCart}>
                 <ShoppingCart size={20} /> Tambah Keranjang
               </button>
               <button className="buy-now-btn-detail" onClick={handleBuyNow}>

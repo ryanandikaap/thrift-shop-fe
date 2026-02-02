@@ -12,10 +12,48 @@ const CheckoutPage = ({ user, showNotification, cart, onAuthAction }) => {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: user?.username || '',
-    email: '',
+    email: user?.email || '',
     phone: '',
     address: '',
   });
+
+  useEffect(() => {
+    if (!user) return;
+    setFormData((prev) => ({
+      ...prev,
+      name: prev.name || user?.username || '',
+      email: prev.email || user?.email || '',
+    }));
+  }, [user]);
+
+  useEffect(() => {
+    if (!user || (user?.email && user?.username)) return;
+    let isMounted = true;
+
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+        const response = await fetch('http://localhost:5000/api/users/profile', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!isMounted) return;
+        setFormData((prev) => ({
+          ...prev,
+          name: prev.name || data.username || '',
+          email: prev.email || data.email || '',
+        }));
+      } catch (err) {
+      }
+    };
+
+    fetchProfile();
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
 
   useEffect(() => {
     setLoading(true);

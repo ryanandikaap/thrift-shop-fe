@@ -62,6 +62,15 @@
   margin-bottom: 40px;
 }
 
+.upload-form {
+  display: grid;
+  gap: 16px;
+}
+
+.upload-form input[type="file"] {
+  display: none;
+}
+
 .upload-form .file-upload-label {
   border: 2px dashed var(--neutral-dark);
   border-radius: var(--radius);
@@ -80,6 +89,10 @@
   border-color: var(--primary);
   background-color: var(--neutral-light);
   color: var(--primary);
+}
+
+.upload-form .cta-btn {
+  width: 100%;
 }
 
 .payment-footer {

@@ -106,6 +106,7 @@ const AdminOrderDetail = ({ showNotification }) => {
         throw new Error(data.message || 'Gagal memperbarui proses perjalanan');
       }
       setOrder(data.order);
+      setStatus(data.order.status);
       setJourneyNote('');
       showNotification('Proses perjalanan berhasil diperbarui!', 'success');
     } catch (err) {

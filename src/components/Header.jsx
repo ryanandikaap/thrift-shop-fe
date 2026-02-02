@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, Search, Menu, X, User, Briefcase, Heart, LogOut, UserCircle } from 'lucide-react';
 import '../styles/components/Header.css';
 
@@ -16,6 +16,9 @@ const Header = ({
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  const hideSearch = isAdminRoute || userRole === 'admin';
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -51,15 +54,17 @@ const Header = ({
         </nav>
 
         <div className="header-actions">
-          <div className="search-box">
-            <Search size={20} />
-            <input
-              type="text"
-              placeholder="Cari produk..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          {!hideSearch && (
+            <div className="search-box">
+              <Search size={20} />
+              <input
+                type="text"
+                placeholder="Cari produk..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          )}
           <Link to="/keranjang" className="cart-btn" aria-label="Lihat keranjang belanja">
             <ShoppingCart size={22} />
             {totalCartItems > 0 && <span className="cart-count">{totalCartItems}</span>}

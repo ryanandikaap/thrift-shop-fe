@@ -9,7 +9,6 @@ import Contact from './pages/info/Contact';
 import AdminProductList from './pages/admin/AdminProductList'; 
 import AdminLayout from './pages/admin/AdminLayout'; 
 import AdminProductForm from './pages/admin/AdminProductForm'; 
-import AdminLoginPage from './pages/admin/AdminLoginPage'; 
 import AdminDashboard from './pages/admin/AdminDashboard'; 
 import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminOrderList from './pages/admin/AdminOrderList';
@@ -266,24 +265,16 @@ function App() {
           />
 
           <Route  
-            path="/admin/login" 
-            element={<AdminLoginPage 
-              onLoginSuccess={login}
-              showNotification={showNotification}
-            />} 
-          />
-
-          <Route  
             path="/admin" 
             element={
-              <ProtectedRoute>
+              <ProtectedRoute onAuthAction={handleAuthAction}>
                 <AdminLayout />
               </ProtectedRoute>
             }
           >
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="products" element={<AdminProductList />} />
-            <Route path="users" element={<AdminUserList showNotification={showNotification} />} />
+            <Route path="users" element={<AdminUserList showNotification={showNotification} currentUser={user} />} />
             <Route path="orders" element={<AdminOrderList showNotification={showNotification} />} />
             <Route path="orders/:id" element={<AdminOrderDetail showNotification={showNotification} />} />
             <Route path="messages" element={<AdminMessageList showNotification={showNotification} />} />
@@ -291,6 +282,8 @@ function App() {
             <Route path="products/new" element={<AdminProductForm />} />
             <Route path="products/edit/:id" element={<AdminProductForm />} />
           </Route>
+
+          <Route path="/admin/login" element={<Navigate to="/" replace />} />
         </Routes>
 
         <Footer />

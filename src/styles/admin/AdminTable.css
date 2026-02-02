@@ -10,6 +10,43 @@
   box-shadow: var(--shadow);
 }
 
+.admin-user-list .detail-card {
+  background: var(--white);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.admin-create-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.admin-create-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-create-form input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral);
+  font-family: inherit;
+}
+
+.admin-create-form .cta-btn {
+  grid-column: 1 / -1;
+  width: fit-content;
+}
+
+.admin-create-form .password-hint {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
 .admin-filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -152,6 +189,11 @@
 .role-badge.admin {
   background-color: rgba(193, 154, 107, 0.15);
   color: var(--accent-dark);
+}
+
+.role-badge.master_admin {
+  background-color: rgba(90, 60, 20, 0.15);
+  color: #5a3c14;
 }
 
 .role-badge.customer {

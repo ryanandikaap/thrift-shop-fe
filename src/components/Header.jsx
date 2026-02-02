@@ -18,7 +18,8 @@ const Header = ({
   const dropdownRef = useRef(null);
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const hideSearch = isAdminRoute || userRole === 'admin';
+  const isAdminUser = userRole === 'admin' || userRole === 'master_admin';
+  const hideSearch = isAdminRoute || isAdminUser;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -47,7 +48,7 @@ const Header = ({
             <li><NavLink to="/kategori">Kategori</NavLink></li>
             <li><NavLink to="/tentang-kami">Tentang Kami</NavLink></li>
             <li><NavLink to="/kontak">Kontak</NavLink></li>
-            {user && userRole === 'admin' && (
+            {user && isAdminUser && (
               <li><NavLink to="/admin/dashboard" className="admin-dashboard-link">Dashboard Admin</NavLink></li>
             )}
           </ul>

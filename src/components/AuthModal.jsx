@@ -42,9 +42,6 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
       showNotification(data.message, 'success');
 
       if (isLogin) {
-        if (data.user && data.user.role === 'admin') {
-          throw new Error('Akun admin tidak dapat login melalui form ini.');
-        }
         onLoginSuccess(data.token, data.user);
       } else {
         setIsLogin(true);
@@ -68,6 +65,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
           isLogin={isLogin}
           onSubmit={handleAuthSubmit}
           showNotification={showNotification}
+          enforcePasswordPolicy={true}
         />
 
         <div className="auth-modal-footer">

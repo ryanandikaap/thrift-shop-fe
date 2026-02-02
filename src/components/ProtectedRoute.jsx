@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, onAuthAction }) => {
   const token = localStorage.getItem('authToken');
+  let isAuthorized = false;
 
-  if (!token) {
-    return <Navigate to="/admin/login" />;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      const isExpired = decodedToken.exp * 1000 < Date.now();
+      const isAdminRole = decodedToken.role === 'admin' || decodedToken.role === 'master_admin';
+      isAuthorized = !isExpired && isAdminRole;
+    } catch (error) {
+      isAuthorized = false;
+    }
   }
 
-  try {
-    const decodedToken = jwtDecode(token);
-    if (decodedToken.exp * 1000 < Date.now() || decodedToken.role !== 'admin') {
-      return <Navigate to="/admin/login" />;
+  useEffect(() => {
+    if (!isAuthorized && onAuthAction) {
+      onAuthAction(false, true);
     }
-  } catch (error) {
-    return <Navigate to="/admin/login" />;
+  }, [isAuthorized, onAuthAction]);
+
+  if (!isAuthorized) {
+    return <Navigate to="/" replace />;
   }
 
   return children;

@@ -55,16 +55,24 @@ const AboutUs = () => {
                 </div>
               </div>
             </div>
-            <div className="image-placeholder about-image-1">
-                
-            </div>
+            <div
+              className="image-placeholder about-image-1"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80')",
+              }}
+            ></div>
           </div>
           
           <hr />
           <div className="section-block reverse-layout">
-            <div className="image-placeholder about-image-2">
-                
-            </div>
+            <div
+              className="image-placeholder about-image-2"
+              style={{
+                backgroundImage:
+                  "url('https://plus.unsplash.com/premium_photo-1679056833568-96112bcab545?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+              }}
+            ></div>
             <div className="text-content">
               <h2>Proses Kurasi Kami</h2>
               <p>Kami tidak hanya menjual pakaian, kami menawarkan barang-barang dengan cerita. Proses 4 langkah kami menjamin Anda mendapatkan yang terbaik:</p>
@@ -84,7 +92,9 @@ const AboutUs = () => {
             <div className="features-grid" style={{ marginTop: '40px' }}>
               {features.map((feature, index) => (
                 <div key={index} className="feature-card">
-                  {getIconComponent(feature.icon)}
+                  <div className="feature-icon">
+                    {getIconComponent(feature.icon)}
+                  </div>
                   <h3>{feature.title}</h3>
                   <p>{feature.description}</p>
                 </div>

@@ -409,10 +409,18 @@
   font-size: 1.2rem;
 }
 
+.product-list-actions .favorite-btn svg {
+  stroke: currentColor;
+}
+
 .product-list-actions .favorite-btn:hover,
 .product-list-actions .favorite-btn.active {
   color: var(--warning);
   border-color: var(--warning);
+}
+
+.product-list-actions .favorite-btn.active svg {
+  fill: currentColor;
 }
 
 .product-list-actions .add-to-cart-btn {

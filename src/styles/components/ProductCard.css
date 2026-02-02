@@ -106,6 +106,10 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+.favorite-btn svg {
+  stroke: currentColor;
+}
+
 .favorite-btn:hover {
   color: var(--warning);
   transform: scale(1.1);
@@ -114,6 +118,10 @@
 .favorite-btn.active {
   color: var(--warning);
   background: rgba(231, 111, 81, 0.1);
+}
+
+.favorite-btn.active svg {
+  fill: currentColor;
 }
 
 .discount-badge {

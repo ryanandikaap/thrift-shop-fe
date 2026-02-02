@@ -46,7 +46,12 @@ const AdminLoginPage = ({ onLoginSuccess, showNotification }) => {
         <div className="admin-login-box">
           <h2>Admin Panel Login</h2>
           <p className="auth-modal-subtitle">Silakan masukkan kredensial Anda untuk melanjutkan.</p>
-          <AuthForm isLogin={true} onSubmit={handleAdminLogin} showNotification={showNotification} />
+          <AuthForm
+            isLogin={true}
+            onSubmit={handleAdminLogin}
+            showNotification={showNotification}
+            enforcePasswordPolicy={false}
+          />
         </div>
       </div>
     </div>

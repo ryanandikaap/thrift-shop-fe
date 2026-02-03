@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import AuthForm from './AuthForm';
+import ForgotPasswordForm from './ForgotPasswordForm';
 import '../styles/components/AuthModal.css';
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [authView, setAuthView] = useState('login');
 
   useEffect(() => {
     const handleEsc = (event) => {
@@ -18,10 +19,17 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
     };
   }, [isOpen, onClose]);
 
+  useEffect(() => {
+    if (isOpen) {
+      setAuthView('login');
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleAuthSubmit = async (credentials) => {
-    const endpoint = isLogin ? 'login' : 'register';
+    const isLoginView = authView === 'login';
+    const endpoint = isLoginView ? 'login' : 'register';
     const url = `http://localhost:5000/api/auth/${endpoint}`;
 
     try {
@@ -41,10 +49,10 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
 
       showNotification(data.message, 'success');
 
-      if (isLogin) {
+      if (isLoginView) {
         onLoginSuccess(data.token, data.user);
       } else {
-        setIsLogin(true);
+        setAuthView('login');
       }
     } catch (error) {
       showNotification(error.message, 'warning');
@@ -56,25 +64,41 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, showNotification }) => {
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-modal-btn" onClick={onClose}><X size={24} /></button>
-        <h2>{isLogin ? 'Selamat Datang Kembali' : 'Buat Akun Baru'}</h2>
-        <p className="auth-modal-subtitle">
-          {isLogin ? 'Masuk untuk melanjutkan belanja.' : 'Daftar untuk mendapatkan penawaran terbaik.'}
-        </p>
+        {authView === 'forgot' ? (
+          <ForgotPasswordForm
+            showNotification={showNotification}
+            onBackToLogin={() => setAuthView('login')}
+            onResetComplete={() => setAuthView('login')}
+          />
+        ) : (
+          <>
+            <h2>{authView === 'login' ? 'Selamat Datang Kembali' : 'Buat Akun Baru'}</h2>
+            <p className="auth-modal-subtitle">
+              {authView === 'login' ? 'Masuk untuk melanjutkan belanja.' : 'Daftar untuk mendapatkan penawaran terbaik.'}
+            </p>
 
-        <AuthForm
-          isLogin={isLogin}
-          onSubmit={handleAuthSubmit}
-          showNotification={showNotification}
-          enforcePasswordPolicy={true}
-        />
+            <AuthForm
+              isLogin={authView === 'login'}
+              onSubmit={handleAuthSubmit}
+              showNotification={showNotification}
+              enforcePasswordPolicy={true}
+            />
 
-        <div className="auth-modal-footer">
-          {isLogin ? (
-            <p>Belum punya akun? <button onClick={() => setIsLogin(false)}>Daftar di sini</button></p>
-          ) : (
-            <p>Sudah punya akun? <button onClick={() => setIsLogin(true)}>Login di sini</button></p>
-          )}
-        </div>
+            {authView === 'login' && (
+              <div className="auth-inline-links">
+                <button type="button" onClick={() => setAuthView('forgot')}>Lupa password?</button>
+              </div>
+            )}
+
+            <div className="auth-modal-footer">
+              {authView === 'login' ? (
+                <p>Belum punya akun? <button onClick={() => setAuthView('register')}>Daftar di sini</button></p>
+              ) : (
+                <p>Sudah punya akun? <button onClick={() => setAuthView('login')}>Login di sini</button></p>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

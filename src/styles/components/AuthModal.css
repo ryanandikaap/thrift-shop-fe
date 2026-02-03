@@ -80,6 +80,21 @@
   gap: 20px;
 }
 
+.auth-inline-links {
+  margin-top: 12px;
+  text-align: right;
+}
+
+.auth-inline-links button {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.95rem;
+}
+
 .auth-form .form-group {
   text-align: left;
 }
@@ -166,6 +181,12 @@
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.auth-helper {
+  margin-top: 12px;
+  color: var(--text-light);
+  font-size: 0.9rem;
 }
 
 @media (max-width: 480px) {
